@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Apostles Summit — MUN 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="organiser">
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">The Apostles Summit × Delhi International Public School · Inaugural Edition · New Delhi</span>
+    <span class="ticker-item">October 15–16, 2026 · 300 Delegates · 100 Nations · 7 Committees</span>
+    <span class="ticker-item">The Apostles Summit × Delhi International Public School · Inaugural Edition · New Delhi</span>
+    <span class="ticker-item">October 15–16, 2026 · 300 Delegates · 100 Nations · 7 Committees</span>
+  </div>
+</div>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">The Apostles Summit</a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link" id="nl-home">Home</a>
+      <a href="committees.html" class="nav-link" id="nl-committees">Committees</a>
+      <a href="about.html" class="nav-link" id="nl-about">About</a>
+      <a href="apply.html" class="nav-link" id="nl-apply">Apply</a>
+    </div>
+    <a href="apply.html" class="nav-apply">Apply Now</a>
+    <button class="nav-toggle" id="navToggle" onclick="toggleNav()" aria-label="Menu">☰</button>
+  </div>
+</nav>
+<div class="page">
+  <div class="page-header">
+    <div class="ph-eyebrow">Staff Only</div>
+    <h1 class="ph-title">Organiser Access</h1>
+    <p class="ph-sub">Registration data, exports, and conference management tools. Restricted to authorised Secretariat staff.</p>
+  </div>
+  <div class="wrap" style="padding-bottom:80px">
+    <div id="pwSection2">
+      <div class="vault-unlock-box">
+        <div class="vault-unlock-title">Enter Staff Passphrase</div>
+        <div class="pw-wrap" style="justify-content:center;margin-top:18px">
+          <input class="pw-in" type="password" id="adminPw2" placeholder="Enter passphrase..." onkeydown="if(event.key==='Enter')checkPw2()">
+          <button class="vbtn" onclick="checkPw2()">Unlock</button>
+        </div>
+        <div id="pwErr2" style="color:var(--danger);font-size:12px;font-style:italic;text-align:center;margin-top:10px;display:none">✗ Incorrect passphrase</div>
+      </div>
+    </div>
+    <div id="vaultContent2" style="display:none">
+      <div class="vault-top">
+        <div class="vault-title">Registration Records</div>
+        <div class="vault-acts">
+          <button class="vbtn" onclick="exportCSV()">Export CSV</button>
+          <button class="vbtn" onclick="exportJSON()">Export JSON</button>
+          <button class="vbtn red" onclick="clearAll()">Clear All</button>
+        </div>
+      </div>
+      <div class="vault-count" id="vCount2"></div>
+      <div class="vtable-wrap">
+        <table class="vtable">
+          <thead><tr>
+            <th>#</th><th>Name</th><th>Email</th><th>Phone</th><th>Age</th><th>School</th><th>City</th>
+            <th>Gender</th><th>MUNs Att.</th><th>MUNs Org.</th><th>Highest Role</th>
+            <th>Dept 1</th><th>Dept 2</th><th>Pref Pos.</th><th>Availability</th><th>Source</th><th>Date</th>
+          </tr></thead>
+          <tbody id="vBody2"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+  <div class="ft-grid">
+    <div class="ft-brand">
+      <div class="ft-name">The Apostles Summit</div>
+      <p class="ft-motto">A premier Model United Nations conference — built by delegates, for delegates. New Delhi's newest platform for diplomacy and debate.</p>
+    </div>
+    <div>
+      <div class="ft-head">Quick Links</div>
+      <ul class="ft-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="committees.html">Committees</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="apply.html">Apply</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="ft-head">Resources</div>
+      <ul class="ft-links">
+        <li><a href="committees.html">Committee Matrix</a></li>
+        <li><a href="about.html">Conference Details</a></li>
+        <li><a href="about.html">Why Join Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="ft-head">Get in Touch</div>
+      <ul class="ft-links">
+        <li><a href="apply.html">Register Now</a></li>
+        <li><a href="organiser.html">Staff Access</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <p>The Apostles Summit — Model United Nations 2026 · Inaugural Edition · New Delhi, India</p>
+    <p style="margin-top:4px;font-size:10px">© 2026 The Apostles Summit · All Rights Reserved</p>
+  </div>
+</footer>
+<div id="npcOverlay"></div>
+<div id="npcBox">
+  <div class="npc-shell">
+    <div class="npc-portrait">
+      <div class="spike-portrait-wrap">
+        <div class="spike-stage" id="spikeStage">
+          <img class="spike-photo" id="spikePhoto" src="assets/images/spike.png" alt="Spike">
+        </div>
+      </div>
+      <div class="npc-nameplate">
+        <div class="npc-nametag">Spike</div>
+        <div class="npc-roletag">Guide</div>
+      </div>
+    </div>
+    <div class="npc-dialogue">
+      <div class="npc-text-wrap" id="npcTextWrap" style="cursor:pointer" title="Click to skip">
+        <span class="npc-text" id="npcText"></span><span class="tw-cursor" id="twCursor" style="display:none"></span>
+      </div>
+      <div class="npc-choices" id="npcChoices"></div>
+      <div class="npc-chat-row" id="chatRow">
+        <textarea class="npc-input" id="chatInput" rows="2" placeholder="Ask Spike anything about the Summit..."></textarea>
+        <button class="npc-send" id="chatSend" onclick="sendChat()">Ask</button>
+      </div>
+    </div>
+    <button class="npc-close" onclick="closeNPC()" title="Close">✕</button>
+  </div>
+</div>
+<button class="summon-btn" id="summonBtn" onclick="openNPC()">Ask Spike</button>
+<div class="toast" id="toastEl"><div class="toast-t" id="toastT"></div><div class="toast-m" id="toastM"></div></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

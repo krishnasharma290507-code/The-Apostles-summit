@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Apostles Summit — MUN 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="home">
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">The Apostles Summit × Delhi International Public School · Inaugural Edition · New Delhi</span>
+    <span class="ticker-item">October 15–16, 2026 · 300 Delegates · 100 Nations · 7 Committees</span>
+    <span class="ticker-item">The Apostles Summit × Delhi International Public School · Inaugural Edition · New Delhi</span>
+    <span class="ticker-item">October 15–16, 2026 · 300 Delegates · 100 Nations · 7 Committees</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">The Apostles Summit</a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link active" id="nl-home">Home</a>
+      <a href="committees.html" class="nav-link" id="nl-committees">Committees</a>
+      <a href="about.html" class="nav-link" id="nl-about">About</a>
+      <a href="apply.html" class="nav-apply">Apply Now</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" onclick="toggleNav()" aria-label="Menu">☰</button>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">Inaugural Edition · October 2026 · New Delhi</p>
+  <h1 class="hero-title">The Apostles<br>Summit</h1>
+  <p class="hero-subtitle">Model United Nations</p>
+  <div class="hero-line"></div>
+  <p class="hero-tagline">Every Committee. A Choice. Every Power. A Temptation.</p>
+  <p class="hero-desc">Two days of diplomacy, debate, and decision. 300 delegates. 100 nations. Seven committees where the weight of the world meets the conscience of its future leaders.</p>
+  <div class="hero-actions">
+    <a href="apply.html" class="btn btn-primary">Apply for Secretariat</a>
+    <a href="committees.html" class="btn btn-outline">View Committees</a>
+  </div>
+</section>
+
+<!-- ANNOUNCEMENT BAND -->
+<div class="cta-band" style="background:var(--bg-surface);border-bottom:1px solid var(--border-gold)">
+  <div class="cta-band-inner">
+    <div>
+      <div class="cta-band-title">Secretariat Applications Are Live</div>
+      <div class="cta-band-sub">Shape the conference from within — as an organiser, director, or executive board member.</div>
+    </div>
+    <a href="apply.html" class="btn btn-primary">Apply Now</a>
+  </div>
+</div>
+
+<!-- COUNTDOWN -->
+<div class="countdown-section">
+  <div class="countdown-eyebrow">The Summit Commences In</div>
+  <div class="countdown-title">Time Until The Conference</div>
+  <div id="cdDone" class="countdown-done">The Summit Has Begun</div>
+  <div class="countdown-grid" id="cdGrid">
+    <div class="cd-cell"><span class="cd-num" id="cd-days">00</span><span class="cd-label">Days</span></div>
+    <div class="cd-colon">:</div>
+    <div class="cd-cell"><span class="cd-num" id="cd-hours">00</span><span class="cd-label">Hours</span></div>
+    <div class="cd-colon">:</div>
+    <div class="cd-cell"><span class="cd-num" id="cd-mins">00</span><span class="cd-label">Minutes</span></div>
+    <div class="cd-colon">:</div>
+    <div class="cd-cell"><span class="cd-num" id="cd-secs">00</span><span class="cd-label">Seconds</span></div>
+  </div>
+  <div class="countdown-event-date" id="cdDateLabel">Conference Date · October 15 – 16, 2026</div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-cell"><div class="stat-n" data-target="7">0</div><div class="stat-l">Committees</div></div>
+  <div class="stat-cell"><div class="stat-n" data-target="300">0</div><div class="stat-l">Delegates</div></div>
+  <div class="stat-cell"><div class="stat-n" data-target="100">0</div><div class="stat-l">Nations</div></div>
+  <div class="stat-cell"><div class="stat-n" data-target="2">0</div><div class="stat-l">Days</div></div>
+</div>
+
+<!-- ABOUT SECTION -->
+<div class="wrap" style="padding:80px 32px">
+  <div class="about-grid">
+    <div class="about-text">
+      <div class="sec-sub">About The Summit</div>
+      <h2 class="about-title">Where Words Shape Worlds</h2>
+      <p class="about-body">The Apostles Summit is Delhi's newest Model United Nations conference — a gathering where the next generation of diplomats, debaters, and decision-makers come together to tackle the world's most pressing challenges through structured debate and diplomacy.</p>
+      <p class="about-body" style="margin-top:14px">For our Inaugural Edition, we bring together 300 delegates from schools and colleges across the country, representing 100 nations across 7 unique committees — each paired with one of the Seven Temptations.</p>
+      <a href="about.html" class="btn btn-primary" style="margin-top:24px">Learn More</a>
+    </div>
+    <div class="about-stat-stack">
+      <div class="about-stat-card"><div class="asc-num">1st</div><div class="asc-label">Inaugural Edition</div></div>
+      <div class="about-stat-card"><div class="asc-num">Delhi</div><div class="asc-label">Conference City</div></div>
+      <div class="about-stat-card"><div class="asc-num">Oct '26</div><div class="asc-label">Conference Date</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- COMMITTEES -->
+<div class="section-divider"></div>
+<div style="background:var(--bg-surface);padding:72px 0">
+  <div class="wrap">
+    <div class="sec-label" style="padding:0 0 40px">
+      <div class="sec-sub">Seven Chambers Await</div>
+      <p class="sec-title">The Seven Temptations</p>
+    </div>
+    <div class="home-comm-grid">
+      <a href="committees.html" class="hc-card"><div class="hc-num">I.</div><div class="hc-name">UNSC</div><div class="hc-theme">Pride</div></a>
+      <a href="committees.html" class="hc-card"><div class="hc-num">II.</div><div class="hc-name">UNHRC</div><div class="hc-theme">Greed</div></a>
+      <a href="committees.html" class="hc-card"><div class="hc-num">III.</div><div class="hc-name">UNCSW</div><div class="hc-theme">Wrath</div></a>
+      <a href="committees.html" class="hc-card"><div class="hc-num">IV.</div><div class="hc-name">AIPPM</div><div class="hc-theme">Envy</div></a>
+      <a href="committees.html" class="hc-card"><div class="hc-num">V.</div><div class="hc-name">IP</div><div class="hc-theme">Lust</div></a>
+      <a href="committees.html" class="hc-card"><div class="hc-num">VI.</div><div class="hc-name">IPL</div><div class="hc-theme">Gluttony</div></a>
+      <a href="committees.html" class="hc-card"><div class="hc-num">VII.</div><div class="hc-name">UEFA</div><div class="hc-theme">Sloth</div></a>
+    </div>
+    <div style="text-align:center;margin-top:40px">
+      <a href="committees.html" class="btn btn-primary">View All Committees</a>
+    </div>
+  </div>
+</div>
+
+<!-- FIRST EVENT -->
+<div class="first-event-section" style="background:var(--bg-deep);border-top:1px solid var(--border-gold);border-bottom:1px solid var(--border-gold)">
+  <div class="wrap fe-wrap">
+    <div class="fe-badge">Our First Event</div>
+    <h2 class="fe-title" style="color:var(--cream)">The Apostles Summit<br><span class="fe-collab">×</span><br>Delhi International Public School</h2>
+    <p class="fe-tagline">Where it all began.</p>
+    <p class="fe-body">Before the Grand Council of 300 delegates, there was a single, defining moment — a collaboration between The Apostles Summit and Delhi International Public School that planted the seed of something extraordinary.</p>
+    <div class="fe-cards">
+      <div class="fe-card"><div class="fe-card-icon">★</div><div class="fe-card-title">Venue Partner</div><div class="fe-card-val">Delhi International<br>Public School</div></div>
+      <div class="fe-card"><div class="fe-card-icon">★</div><div class="fe-card-title">Type</div><div class="fe-card-val">Founding Event &<br>Pilot Conference</div></div>
+      <div class="fe-card"><div class="fe-card-icon">★</div><div class="fe-card-title">Location</div><div class="fe-card-val">New Delhi<br>India</div></div>
+      <div class="fe-card"><div class="fe-card-icon">★</div><div class="fe-card-title">Legacy</div><div class="fe-card-val">Foundation of<br>The Apostles Summit</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-band">
+  <div class="cta-band-inner">
+    <div>
+      <div class="cta-band-title">Ready to Join the Summit?</div>
+      <div class="cta-band-sub">Secretariat applications are now open. Shape the conference from within.</div>
+    </div>
+    <a href="apply.html" class="btn btn-primary">Apply for Secretariat</a>
+  </div>
+</div>
+
+</div><!-- /page -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-grid">
+    <div class="ft-brand">
+      <div class="ft-name">The Apostles Summit</div>
+      <p class="ft-motto">A premier Model United Nations conference — built by delegates, for delegates. New Delhi's newest platform for diplomacy and debate.</p>
+    </div>
+    <div>
+      <div class="ft-head">Quick Links</div>
+      <ul class="ft-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="committees.html">Committees</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="apply.html">Apply</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="ft-head">Resources</div>
+      <ul class="ft-links">
+        <li><a href="committees.html">Committee Matrix</a></li>
+        <li><a href="about.html">Conference Details</a></li>
+        <li><a href="about.html">Why Join Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="ft-head">Get in Touch</div>
+      <ul class="ft-links">
+        <li><a href="apply.html">Register Now</a></li>
+        <li><a href="organiser.html">Staff Access</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <p>The Apostles Summit — Model United Nations 2026 · Inaugural Edition · New Delhi, India</p>
+    <p style="margin-top:4px;font-size:10px">© 2026 The Apostles Summit · All Rights Reserved</p>
+  </div>
+</footer>
+
+<!-- NPC OVERLAY -->
+<div id="npcOverlay"></div>
+<div id="npcBox">
+  <div class="npc-shell">
+    <div class="npc-portrait">
+      <div class="spike-portrait-wrap">
+        <div class="spike-stage" id="spikeStage">
+          <img class="spike-photo" id="spikePhoto" src="assets/images/spike.png" alt="Spike">
+        </div>
+      </div>
+      <div class="npc-nameplate">
+        <div class="npc-nametag">Spike</div>
+        <div class="npc-roletag">Guide</div>
+      </div>
+    </div>
+    <div class="npc-dialogue">
+      <div class="npc-text-wrap" id="npcTextWrap" style="cursor:pointer" title="Click to skip">
+        <span class="npc-text" id="npcText"></span><span class="tw-cursor" id="twCursor" style="display:none"></span>
+      </div>
+      <div class="npc-choices" id="npcChoices"></div>
+      <div class="npc-chat-row" id="chatRow">
+        <textarea class="npc-input" id="chatInput" rows="2" placeholder="Ask Spike anything about the Summit..."></textarea>
+        <button class="npc-send" id="chatSend" onclick="sendChat()">Ask</button>
+      </div>
+    </div>
+    <button class="npc-close" onclick="closeNPC()" title="Close">✕</button>
+  </div>
+</div>
+<button class="summon-btn" id="summonBtn" onclick="openNPC()">Ask Spike</button>
+<div class="toast" id="toastEl"><div class="toast-t" id="toastT"></div><div class="toast-m" id="toastM"></div></div>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

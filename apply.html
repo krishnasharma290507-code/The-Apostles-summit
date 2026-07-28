@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Apostles Summit — MUN 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="apply">
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">The Apostles Summit × Delhi International Public School · Inaugural Edition · New Delhi</span>
+    <span class="ticker-item">October 15–16, 2026 · 300 Delegates · 100 Nations · 7 Committees</span>
+    <span class="ticker-item">The Apostles Summit × Delhi International Public School · Inaugural Edition · New Delhi</span>
+    <span class="ticker-item">October 15–16, 2026 · 300 Delegates · 100 Nations · 7 Committees</span>
+  </div>
+</div>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">The Apostles Summit</a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link" id="nl-home">Home</a>
+      <a href="committees.html" class="nav-link" id="nl-committees">Committees</a>
+      <a href="about.html" class="nav-link" id="nl-about">About</a>
+      <a href="apply.html" class="nav-link" id="nl-apply">Apply</a>
+    </div>
+    <a href="apply.html" class="nav-apply">Apply Now</a>
+    <button class="nav-toggle" id="navToggle" onclick="toggleNav()" aria-label="Menu">☰</button>
+  </div>
+</nav>
+<div class="page">
+  <div class="page-header">
+    <div class="ph-eyebrow">Secretariat Application</div>
+    <h1 class="ph-title">Join the Secretariat</h1>
+    <p class="ph-sub">Applications are open for the Apostles Summit Secretariat 2026. Shape the conference from within — as an organiser, director, or executive board member.</p>
+  </div>
+  <div class="wrap" style="padding-bottom:80px;padding-top:52px">
+    <div class="reg-panel">
+    <div class="reg-head">
+      <div class="reg-head-pre">The Apostles Summit · Secretariat Application</div>
+      <div class="reg-head-title">Apply for Secretariat</div>
+      <p class="reg-head-sub">Welcome to the Secretariat Application for The Apostles Summit. We're delighted you're considering joining the backbone of this premier MUN experience. Please answer each section thoughtfully and honestly — we'll place you in a role where you'll thrive.</p>
+    </div>
+    <div class="perks-strip">
+      <div class="perk-item"><span class="perk-icon">★</span><span>Performance-Based Incentives</span></div>
+      <div class="perk-item"><span class="perk-icon">★</span><span>Certificates &amp; LORs</span></div>
+      <div class="perk-item"><span class="perk-icon">★</span><span>Professional Networking</span></div>
+      <div class="perk-item"><span class="perk-icon">★</span><span>Govt-Recognised Certificates</span></div>
+      <div class="perk-item"><span class="perk-icon">★</span><span>Mementos for All Members</span></div>
+      <div class="perk-item"><span class="perk-icon">★</span><span>Leadership &amp; Growth</span></div>
+    </div>
+    <div class="reg-body">
+      <input type="hidden" name="role" value="Secretariat">
+      <div class="step-bar">
+        <div class="step active" id="step-dot-1"><span class="step-num">1</span><span class="step-lbl">Personal</span></div>
+        <div class="step-line"></div>
+        <div class="step" id="step-dot-2"><span class="step-num">2</span><span class="step-lbl">Background</span></div>
+        <div class="step-line"></div>
+        <div class="step" id="step-dot-3"><span class="step-num">3</span><span class="step-lbl">Department</span></div>
+        <div class="step-line"></div>
+        <div class="step" id="step-dot-4"><span class="step-num">4</span><span class="step-lbl">Motivation</span></div>
+      </div>
+      <div class="form-page active" id="page-1">
+        <div class="page-title">Section 1 — Personal Information</div>
+        <div class="fgrid">
+          <div class="fld"><label class="flabel">Full Name *</label><input class="finput" id="r_name" type="text" placeholder="Your full name"></div>
+          <div class="fld"><label class="flabel">Email Address *</label><input class="finput" id="r_email" type="email" placeholder="your@email.com"></div>
+          <div class="fld"><label class="flabel">Phone Number *</label><input class="finput" id="r_phone" type="tel" placeholder="+91 XXXXXXXXXX"></div>
+          <div class="fld"><label class="flabel">Age</label><input class="finput" id="r_age" type="number" placeholder="Your age" min="14" max="30"></div>
+          <div class="fld"><label class="flabel">School / College / Institution *</label><input class="finput" id="r_school" type="text" placeholder="Your institution"></div>
+          <div class="fld"><label class="flabel">City</label><input class="finput" id="r_city" type="text" placeholder="Your city"></div>
+        </div>
+        <div class="fgrid" style="margin-top:0">
+          <div class="fld">
+            <label class="flabel">Gender</label>
+            <select class="fsel" id="r_gender">
+              <option value="">— Select —</option>
+              <option>Male</option><option>Female</option><option>Non-binary</option><option>Prefer not to say</option>
+            </select>
+          </div>
+          <div class="fld">
+            <label class="flabel">How Did You Hear About Us?</label>
+            <select class="fsel" id="r_source">
+              <option value="">— Select —</option>
+              <option>Instagram / Social Media</option>
+              <option>Friend / Colleague</option>
+              <option>School / College Notice</option>
+              <option>Previous Apostles Event</option>
+              <option>WhatsApp Group</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="page-nav"><button class="nav-btn next" onclick="goPage(1,2)">Next Section &rarr;</button></div>
+      </div>
+      <div class="form-page" id="page-2">
+        <div class="page-title">Section 2 — MUN &amp; Event Experience</div>
+        <div class="fgrid">
+          <div class="fld">
+            <label class="flabel">Number of MUNs Attended</label>
+            <select class="fsel" id="r_munsatt">
+              <option value="">— Select —</option>
+              <option>0 — None yet</option>
+              <option>1 to 2</option>
+              <option>3 to 5</option>
+              <option>6 to 10</option>
+              <option>10+</option>
+            </select>
+          </div>
+          <div class="fld">
+            <label class="flabel">Number of MUNs Organised / Secretariat</label>
+            <select class="fsel" id="r_munsorg">
+              <option value="">— Select —</option>
+              <option>0 — None yet</option>
+              <option>1</option>
+              <option>2 to 3</option>
+              <option>4+</option>
+            </select>
+          </div>
+          <div class="fld">
+            <label class="flabel">Highest Secretariat Position Held</label>
+            <select class="fsel" id="r_highpos">
+              <option value="">— Select —</option>
+              <option>No prior Secretariat experience</option>
+              <option>Executive Board Member (EBM)</option>
+              <option>Director / Deputy Director</option>
+              <option>Under-Secretary-General (USG)</option>
+              <option>Deputy Secretary-General (DSG)</option>
+              <option>Secretary-General (SG)</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="fld">
+            <label class="flabel">Awards Won (if any)</label>
+            <input class="finput" id="r_awards" type="text" placeholder="e.g. Best Delegate, Outstanding Delegate">
+          </div>
+        </div>
+        <div class="fgrid" style="margin-top:0">
+          <div class="fld full">
+            <label class="flabel">Other Relevant Experience</label>
+            <textarea class="ftarea" id="r_otherexp" placeholder="Describe any other experience relevant to this role — event management, public speaking, design, writing, etc."></textarea>
+          </div>
+        </div>
+        <div class="page-nav">
+          <button class="nav-btn back" onclick="goPage(2,1)">&larr; Back</button>
+          <button class="nav-btn next" onclick="goPage(2,3)">Next Section &rarr;</button>
+        </div>
+      </div>
+      <div class="form-page" id="page-3">
+        <div class="page-title">Section 3 — Department Preference</div>
+        <p style="font-size:13px;color:var(--text-dim);font-style:italic;margin-bottom:20px;line-height:1.7">We are seeking individuals across: <strong style="color:var(--text-body)">Academics, Logistics, Administration, Delegate Affairs, Sponsorship, Design, and Content Writing.</strong> Select the departments that best align with your skills.</p>
+        <div class="fgrid">
+          <div class="fld">
+            <label class="flabel">First Department Preference *</label>
+            <select class="fsel" id="r_dept1">
+              <option value="">— Select Department —</option>
+              <option>Academics</option><option>Logistics</option><option>Administration</option>
+              <option>Delegate Affairs</option><option>Sponsorship</option><option>Design</option>
+              <option>Content Writing</option><option>No preference — place me where needed</option>
+            </select>
+          </div>
+          <div class="fld">
+            <label class="flabel">Second Department Preference</label>
+            <select class="fsel" id="r_dept2">
+              <option value="">— Select Department —</option>
+              <option>Academics</option><option>Logistics</option><option>Administration</option>
+              <option>Delegate Affairs</option><option>Sponsorship</option><option>Design</option>
+              <option>Content Writing</option><option>No second preference</option>
+            </select>
+          </div>
+          <div class="fld">
+            <label class="flabel">Preferred Role / Position</label>
+            <select class="fsel" id="r_prefpos">
+              <option value="">— Select —</option>
+              <option>Executive Board Member (EBM)</option>
+              <option>Director</option>
+              <option>Under-Secretary-General (USG)</option>
+              <option>Open to any role</option>
+            </select>
+          </div>
+          <div class="fld">
+            <label class="flabel">Availability (Days)</label>
+            <select class="fsel" id="r_avail">
+              <option value="">— Select —</option>
+              <option>Both Days (Full Conference)</option>
+              <option>Day 1 Only</option>
+              <option>Day 2 Only</option>
+              <option>Pre-conference preparation only</option>
+            </select>
+          </div>
+          <div class="fld full">
+            <label class="flabel">Relevant Skills for Your Chosen Department</label>
+            <textarea class="ftarea" id="r_skills" placeholder="Describe skills relevant to your preferred department..."></textarea>
+          </div>
+        </div>
+        <div class="page-nav">
+          <button class="nav-btn back" onclick="goPage(3,2)">&larr; Back</button>
+          <button class="nav-btn next" onclick="goPage(3,4)">Next Section &rarr;</button>
+        </div>
+      </div>
+      <div class="form-page" id="page-4">
+        <div class="page-title">Section 4 — Motivation &amp; Declaration</div>
+        <div class="fgrid">
+          <div class="fld full">
+            <label class="flabel">Why do you want to join The Apostles Summit Secretariat? *</label>
+            <textarea class="ftarea" id="r_why" style="min-height:100px" placeholder="Tell us what motivates you..."></textarea>
+          </div>
+          <div class="fld full">
+            <label class="flabel">What unique value do you bring to the team?</label>
+            <textarea class="ftarea" id="r_value" placeholder="Describe a specific skill, experience, or quality that sets you apart..."></textarea>
+          </div>
+          <div class="fld full">
+            <label class="flabel">Any Questions or Additional Comments</label>
+            <textarea class="ftarea" id="r_msg" placeholder="Any questions for the organising team, or anything else you'd like us to know..."></textarea>
+          </div>
+        </div>
+        <div class="declaration-box">
+          <label class="decl-label">
+            <input type="checkbox" id="r_decl" style="accent-color:var(--gold);width:14px;height:14px;cursor:pointer">
+            <span>I confirm that all information provided is accurate. I understand that submitting this form does not guarantee a position and that the Apostles Secretariat team will contact shortlisted candidates.</span>
+          </label>
+        </div>
+        <div class="page-nav">
+          <button class="nav-btn back" onclick="goPage(4,3)">&larr; Back</button>
+          <button class="submit-btn" id="pledgeBtn" onclick="submitReg()" style="margin-top:0"><span>Submit Application &rarr;</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+<footer>
+  <div class="ft-grid">
+    <div class="ft-brand">
+      <div class="ft-name">The Apostles Summit</div>
+      <p class="ft-motto">A premier Model United Nations conference — built by delegates, for delegates. New Delhi's newest platform for diplomacy and debate.</p>
+    </div>
+    <div>
+      <div class="ft-head">Quick Links</div>
+      <ul class="ft-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="committees.html">Committees</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="apply.html">Apply</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="ft-head">Resources</div>
+      <ul class="ft-links">
+        <li><a href="committees.html">Committee Matrix</a></li>
+        <li><a href="about.html">Conference Details</a></li>
+        <li><a href="about.html">Why Join Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="ft-head">Get in Touch</div>
+      <ul class="ft-links">
+        <li><a href="apply.html">Register Now</a></li>
+        <li><a href="organiser.html">Staff Access</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <p>The Apostles Summit — Model United Nations 2026 · Inaugural Edition · New Delhi, India</p>
+    <p style="margin-top:4px;font-size:10px">© 2026 The Apostles Summit · All Rights Reserved</p>
+  </div>
+</footer>
+<div id="npcOverlay"></div>
+<div id="npcBox">
+  <div class="npc-shell">
+    <div class="npc-portrait">
+      <div class="spike-portrait-wrap">
+        <div class="spike-stage" id="spikeStage">
+          <img class="spike-photo" id="spikePhoto" src="assets/images/spike.png" alt="Spike">
+        </div>
+      </div>
+      <div class="npc-nameplate">
+        <div class="npc-nametag">Spike</div>
+        <div class="npc-roletag">Guide</div>
+      </div>
+    </div>
+    <div class="npc-dialogue">
+      <div class="npc-text-wrap" id="npcTextWrap" style="cursor:pointer" title="Click to skip">
+        <span class="npc-text" id="npcText"></span><span class="tw-cursor" id="twCursor" style="display:none"></span>
+      </div>
+      <div class="npc-choices" id="npcChoices"></div>
+      <div class="npc-chat-row" id="chatRow">
+        <textarea class="npc-input" id="chatInput" rows="2" placeholder="Ask Spike anything about the Summit..."></textarea>
+        <button class="npc-send" id="chatSend" onclick="sendChat()">Ask</button>
+      </div>
+    </div>
+    <button class="npc-close" onclick="closeNPC()" title="Close">✕</button>
+  </div>
+</div>
+<button class="summon-btn" id="summonBtn" onclick="openNPC()">Ask Spike</button>
+<div class="toast" id="toastEl"><div class="toast-t" id="toastT"></div><div class="toast-m" id="toastM"></div></div>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/register.js"></script>
+</body>
+</html>
