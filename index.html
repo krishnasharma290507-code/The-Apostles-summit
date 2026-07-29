@@ -33,9 +33,11 @@
       <a href="founders.html" class="nav-link" id="nl-founders">Founder's Note</a>
       <a href="apply.html" class="nav-link" id="nl-apply">Apply</a>
     </div>
-    <button class="nav-toggle" id="navToggle" onclick="toggleNav()" aria-label="Menu">☰</button>
+    <button class="nav-toggle" id="navToggle" onclick="toggleNav()" aria-label="Menu" style="display:none">☰</button>
   </div>
 </nav>
+
+<div id="staggeredMenuContainer"></div>
 
 <div class="page">
 
@@ -259,6 +261,37 @@
   } catch(e) {
     console.error('Galaxy error:', e);
   }
+})();
+</script>
+<script src="assets/js/staggered-menu.js"></script>
+<script>
+(function(){
+  var smContainer = document.getElementById('staggeredMenuContainer');
+  if (!smContainer || !window.createStaggeredMenu) return;
+  createStaggeredMenu(smContainer, {
+    position: 'right',
+    colors: ['#c9a84c', '#8b2500', '#0a0a0a'],
+    items: [
+      { label: 'Home', ariaLabel: 'Go to home page', link: 'index.html' },
+      { label: 'Committees', ariaLabel: 'View committees', link: 'committees.html' },
+      { label: 'About', ariaLabel: 'Learn about us', link: 'about.html' },
+      { label: 'Founder\'s Note', ariaLabel: 'Founder\'s note', link: 'founders.html' },
+      { label: 'Apply', ariaLabel: 'Apply for secretariat', link: 'apply.html' }
+    ],
+    socialItems: [
+      { label: 'Instagram', link: 'https://instagram.com' },
+      { label: 'LinkedIn', link: 'https://linkedin.com' }
+    ],
+    displaySocials: true,
+    displayItemNumbering: true,
+    menuButtonColor: 'var(--text)',
+    openMenuButtonColor: 'var(--accent)',
+    accentColor: 'var(--accent)',
+    changeMenuColorOnOpen: true,
+    closeOnClickAway: true,
+    onMenuOpen: function(){ console.log('Menu opened'); },
+    onMenuClose: function(){ console.log('Menu closed'); }
+  });
 })();
 </script>
 </body>
