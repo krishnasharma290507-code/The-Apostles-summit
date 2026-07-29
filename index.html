@@ -6,8 +6,9 @@
 <title>The Apostles Summit — MUN 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
+<script src="https://unpkg.com/ogl@1.0.1/dist/ogl.umd.js"></script>
 </head>
 <body data-page="home">
 
@@ -40,10 +41,7 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="stars-container" id="starsContainer">
-    <div class="nebula nebula-1"></div>
-    <div class="nebula nebula-2"></div>
-  </div>
+  <div class="galaxy-wrap" id="galaxyWrap"></div>
 
   <p class="hero-eyebrow">We Built The Conference We Wished Existed</p>
 
@@ -58,16 +56,6 @@
   <div class="hero-actions">
     <a href="apply.html" class="btn">Apply for Secretariat</a>
     <a href="committees.html" class="btn btn-outline">Explore Committees</a>
-  </div>
-
-  <!-- Cosmic bottom -->
-  <div class="hero-cosmic">
-    <div class="cosmic-blackhole cosmic-bh-1"></div>
-    <div class="cosmic-blackhole cosmic-bh-2"></div>
-    <div class="cosmic-blackhole cosmic-bh-3"></div>
-    <div class="cosmic-ring cosmic-ring-1"></div>
-    <div class="cosmic-ring cosmic-ring-2"></div>
-    <div class="cosmic-ring cosmic-ring-3"></div>
   </div>
 </section>
 
@@ -248,27 +236,25 @@
 <div class="toast" id="toastEl"><div class="toast-t" id="toastT"></div><div class="toast-m" id="toastM"></div></div>
 
 <script src="assets/js/main.js"></script>
+<script src="assets/js/galaxy.js"></script>
 <script>
 (function(){
-  const container = document.getElementById('starsContainer');
-  if (!container) return;
-  for (let i = 0; i < 40; i++) {
-    const star = document.createElement('div');
-    star.className = 'star';
-    star.style.left = Math.random() * 100 + '%';
-    star.style.top = Math.random() * 100 + '%';
-    star.style.animationDelay = (Math.random() * 8) + 's';
-    star.style.animationDuration = (3 + Math.random() * 5) + 's';
-    container.appendChild(star);
-  }
-  for (let i = 0; i < 2; i++) {
-    const bh = document.createElement('div');
-    bh.className = 'blackhole';
-    bh.style.top = (20 + Math.random() * 60) + '%';
-    bh.style.left = (10 + Math.random() * 80) + '%';
-    bh.style.animationDelay = (i * 12) + 's';
-    container.appendChild(bh);
-  }
+  var wrap = document.getElementById('galaxyWrap');
+  if (!wrap || !window.createGalaxy) return;
+  wrap.style.pointerEvents = 'auto';
+  createGalaxy(wrap, {
+    hueShift: 40,
+    saturation: 0.3,
+    glowIntensity: 0.5,
+    twinkleIntensity: 0.4,
+    density: 0.8,
+    starSpeed: 0.4,
+    rotationSpeed: 0.05,
+    mouseRepulsion: true,
+    repulsionStrength: 1.5,
+    transparent: true,
+    speed: 0.8
+  });
 })();
 </script>
 </body>
