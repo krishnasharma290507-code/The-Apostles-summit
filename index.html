@@ -239,21 +239,25 @@
 <script>
 (function(){
   var wrap = document.getElementById('galaxyWrap');
-  if (!wrap || !window.createGalaxy) return;
+  if (!wrap) { console.error('galaxyWrap not found'); return; }
+  if (!window.createGalaxy) { console.error('createGalaxy not defined'); return; }
+  console.log('galaxyWrap dimensions:', wrap.clientWidth, wrap.clientHeight);
   wrap.style.pointerEvents = 'auto';
-  createGalaxy(wrap, {
-    hueShift: 40,
-    saturation: 0.3,
-    glowIntensity: 0.5,
-    twinkleIntensity: 0.4,
-    density: 0.8,
-    starSpeed: 0.4,
-    rotationSpeed: 0.05,
-    mouseRepulsion: true,
-    repulsionStrength: 1.5,
-    transparent: true,
-    speed: 0.8
-  });
+  try {
+    createGalaxy(wrap, {
+      hueShift: 40,
+      saturation: 0.3,
+      glowIntensity: 0.5,
+      twinkleIntensity: 0.4,
+      density: 0.8,
+      rotationSpeed: 0.05,
+      mouseRepulsion: true,
+      repulsionStrength: 1.5
+    });
+    console.log('Galaxy created successfully');
+  } catch(e) {
+    console.error('Galaxy error:', e);
+  }
 })();
 </script>
 </body>
