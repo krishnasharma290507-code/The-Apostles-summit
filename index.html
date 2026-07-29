@@ -29,7 +29,8 @@
       <a href="index.html" class="nav-link active" id="nl-home">Home</a>
       <a href="committees.html" class="nav-link" id="nl-committees">Committees</a>
       <a href="about.html" class="nav-link" id="nl-about">About</a>
-      <a href="apply.html" class="nav-apply">Apply Now</a>
+      <a href="founders.html" class="nav-link" id="nl-founders">Founder's Note</a>
+      <a href="apply.html" class="nav-link" id="nl-apply">Apply</a>
     </div>
     <button class="nav-toggle" id="navToggle" onclick="toggleNav()" aria-label="Menu">☰</button>
   </div>
@@ -39,8 +40,21 @@
 
 <!-- HERO -->
 <section class="hero">
-  <!-- Stars & Blackholes -->
-  <div class="stars-container" id="starsContainer"></div>
+  <!-- Dynamic cosmic background -->
+  <div class="stars-container" id="starsContainer">
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
+    <div class="nebula nebula-3"></div>
+    <div class="cosmic-dust"></div>
+    <div class="cosmic-dust"></div>
+    <div class="cosmic-dust"></div>
+    <div class="cosmic-dust"></div>
+    <div class="cosmic-dust"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+  </div>
 
   <p class="hero-eyebrow">We Built The Conference We Wished Existed</p>
 
@@ -187,6 +201,7 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="committees.html">Committees</a></li>
         <li><a href="about.html">About</a></li>
+        <li><a href="founders.html">Founder's Note</a></li>
         <li><a href="apply.html">Apply</a></li>
       </ul>
     </div>
@@ -248,23 +263,26 @@
 (function(){
   const container = document.getElementById('starsContainer');
   if (!container) return;
-  // Create 80 twinkling stars
-  for (let i = 0; i < 80; i++) {
+  // Create 120 twinkling stars
+  for (let i = 0; i < 120; i++) {
     const star = document.createElement('div');
     star.className = 'star';
     star.style.left = Math.random() * 100 + '%';
     star.style.top = Math.random() * 100 + '%';
     star.style.animationDelay = (Math.random() * 5) + 's';
-    star.style.animationDuration = (2 + Math.random() * 3) + 's';
+    star.style.animationDuration = (1.5 + Math.random() * 4) + 's';
     container.appendChild(star);
   }
-  // Create 5 blackholes
-  for (let i = 0; i < 5; i++) {
+  // Create 8 blackholes
+  for (let i = 0; i < 8; i++) {
     const bh = document.createElement('div');
     bh.className = 'blackhole';
-    bh.style.top = (15 + Math.random() * 70) + '%';
-    bh.style.animationDelay = (i * 6) + 's';
-    bh.style.animationDuration = (20 + Math.random() * 20) + 's';
+    bh.style.top = (10 + Math.random() * 80) + '%';
+    bh.style.left = (Math.random() * 100) + '%';
+    bh.style.animationDelay = (i * 4) + 's';
+    bh.style.animationDuration = (15 + Math.random() * 25) + 's';
+    bh.style.width = (40 + Math.random() * 120) + 'px';
+    bh.style.height = bh.style.width;
     container.appendChild(bh);
   }
 })();
