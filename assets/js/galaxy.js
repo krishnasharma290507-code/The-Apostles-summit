@@ -29,9 +29,9 @@
     'uniform float uTwinkleIntensity;',
     'uniform float uRepulsionStrength;',
     'uniform float uMouseRepulsion;',
+    'uniform float uNumLayers;',
     'varying vec2 vUv;',
     '',
-    '#define NUM_LAYER 5.0',
     '#define STAR_CUTOFF 0.1',
     '#define PI 3.14159265',
     '',
@@ -123,7 +123,7 @@
     '  uv = rot2(uTime * uRotationSpeed) * uv;',
     '  vec3 col = vec3(0.0);',
     '  float speed = uTime * 0.5;',
-    '  for(float i = 0.0; i < 1.0; i += 1.0 / NUM_LAYER){',
+    '  for(float i = 0.0; i < 1.0; i += 1.0 / uNumLayers){',
     '    float depth = fract(i + speed * 0.1);',
     '    float layer = depth;',
     '    float scale = mix(4.0 * uDensity, 20.0 * uDensity, depth);',
@@ -145,12 +145,28 @@
     };
     for(const k in opts) if(opts[k] !== undefined) cfg[k] = opts[k];
 
-    const canvas = document.createElement('canvas');
-    canvas.style.cssText = 'width:100%;height:100%;display:block;position:absolute;top:0;left:0;background:transparent;';
-    container.appendChild(canvas);
+     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-    const gl = canvas.getContext('webgl');
-    if(!gl){ console.error('No WebGL support'); return; }
+     const canvas = document.createElement('canvas');
+     canvas.style.cssText = 'width:100%;height:100%;display:block;position:absolute;top:0;left:0;background:transparent;';
+     container.appendChild(canvas);
+
+     const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+     if(!gl){
+       console.warn('WebGL not supported, disabling Galaxy background');
+       container.style.display = 'none';
+       return;
+     }
+
+     if (isMobile) {
+       cfg.density = 0.3;
+       cfg.glowIntensity = 0.2;
+       cfg.mouseRepulsion = false;
+     }
+
+     gl.enable(gl.BLEND);
+     gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+     gl.clearColor(0, 0, 0, 0);
 
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
@@ -194,18 +210,20 @@
     const uGlow = gl.getUniformLocation(prog, 'uGlowIntensity');
     const uSat = gl.getUniformLocation(prog, 'uSaturation');
     const uRotSpeed = gl.getUniformLocation(prog, 'uRotationSpeed');
-    const uTwinkle = gl.getUniformLocation(prog, 'uTwinkleIntensity');
-    const uRepStr = gl.getUniformLocation(prog, 'uRepulsionStrength');
-    const uMouseRep = gl.getUniformLocation(prog, 'uMouseRepulsion');
+     const uTwinkle = gl.getUniformLocation(prog, 'uTwinkleIntensity');
+     const uRepStr = gl.getUniformLocation(prog, 'uRepulsionStrength');
+     const uMouseRep = gl.getUniformLocation(prog, 'uMouseRepulsion');
+     const uNumLayers = gl.getUniformLocation(prog, 'uNumLayers');
 
-    gl.uniform1f(uHueShift, cfg.hueShift);
-    gl.uniform1f(uDensity, cfg.density);
-    gl.uniform1f(uGlow, cfg.glowIntensity);
-    gl.uniform1f(uSat, cfg.saturation);
-    gl.uniform1f(uRotSpeed, cfg.rotationSpeed);
-    gl.uniform1f(uTwinkle, cfg.twinkleIntensity);
-    gl.uniform1f(uRepStr, cfg.repulsionStrength);
-    gl.uniform1f(uMouseRep, cfg.mouseRepulsion ? 1.0 : 0.0);
+     gl.uniform1f(uHueShift, cfg.hueShift);
+     gl.uniform1f(uDensity, cfg.density);
+     gl.uniform1f(uGlow, cfg.glowIntensity);
+     gl.uniform1f(uSat, cfg.saturation);
+     gl.uniform1f(uRotSpeed, cfg.rotationSpeed);
+     gl.uniform1f(uTwinkle, cfg.twinkleIntensity);
+     gl.uniform1f(uRepStr, cfg.repulsionStrength);
+     gl.uniform1f(uMouseRep, cfg.mouseRepulsion ? 1.0 : 0.0);
+     gl.uniform1f(uNumLayers, isMobile ? 3.0 : 5.0);
 
     let mouseX = 0.5, mouseY = 0.5;
     let smoothX = 0.5, smoothY = 0.5;
@@ -217,7 +235,7 @@
       const w = container.clientWidth || window.innerWidth;
       const h = container.clientHeight || window.innerHeight;
       if(w === 0 || h === 0) return;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1 : 2);
       canvas.width = w * dpr;
       canvas.height = h * dpr;
       gl.viewport(0, 0, canvas.width, canvas.height);
@@ -228,9 +246,11 @@
       requestAnimationFrame(frame);
       const t = (performance.now() - start) * 0.001;
       gl.uniform1f(uTime, t);
-      smoothX += (mouseX - smoothX) * 0.05;
-      smoothY += (mouseY - smoothY) * 0.05;
-      smoothActive += (targetActive - smoothActive) * 0.05;
+      if (!isMobile) {
+        smoothX += (mouseX - smoothX) * 0.05;
+        smoothY += (mouseY - smoothY) * 0.05;
+        smoothActive += (targetActive - smoothActive) * 0.05;
+      }
       gl.uniform2f(uMouse, smoothX, smoothY);
       gl.uniform1f(uMouseActive, smoothActive);
       gl.clear(gl.COLOR_BUFFER_BIT);

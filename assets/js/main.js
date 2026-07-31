@@ -229,6 +229,11 @@ const NPC = {
       if(this.chatInput) this.chatInput.focus();
     }
   },
+  onHintClick() {
+    if (this.state === 'TYPING') { this.skipTW(); return; }
+    if (this.chatRow.classList.contains('on')) return;
+    this.switchToChat(true);
+  },
   async sendChat() {
     if (this.state === 'TYPING') { this.skipTW(); return; }
     if (this.state === 'CHAT_LOADING') return;
@@ -485,7 +490,7 @@ function submitReg(){
     existing.push(rec);
     localStorage.setItem('summit_registrations', JSON.stringify(existing));
     btn.innerHTML = '<span>\u2713  Application Submitted \u2014 We\'ll be in touch!  \u2713</span>';
-    btn.style.borderColor = 'var(--gold)';
+     btn.style.borderColor = 'var(--accent)';
     toast('Application Received', 'Thank you, ' + rec.name.split(' ')[0] + '! We\'ll review your application and be in touch.', 7000);
   } catch (err) {
     console.error('Registration submit error:', err);
