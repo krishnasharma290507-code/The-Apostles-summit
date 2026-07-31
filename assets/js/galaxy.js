@@ -65,17 +65,17 @@
     '',
     'mat2 rot2(float a){ float c=cos(a),s=sin(a); return mat2(c,-s,s,c); }',
     '',
-    'float Star(vec2 uv, float flare){',
-    '  float d = length(uv) * 20.0;',
-    '  float m = (0.05*uGlowIntensity) / (d*d);',
-    '  float rays = smoothstep(0.0,1.0,1.0 - abs(uv.x * 0.5));',
-    '  m += rays * flare * uGlowIntensity * 0.3;',
-    '  uv *= mat2(0.7071,-0.7071,0.7071,0.7071);',
-    '  rays = smoothstep(0.0,1.0,1.0 - abs(uv.x * 0.5));',
-    '  m += rays * 0.3 * flare * uGlowIntensity;',
-    '  m *= 1.0 - smoothstep(0.0, 0.2, d);',
-    '  return m;',
-    '}',
+     'float Star(vec2 uv, float flare){',
+     '  float d = length(uv);',
+     '  float m = (0.05 * uGlowIntensity * 0.05) / (d * d + 0.001);',
+     '  float rays = smoothstep(0.0, 1.0, 1.0 - abs(uv.x));',
+     '  m += rays * flare * uGlowIntensity * 0.05;',
+     '  uv *= mat2(0.7071,-0.7071,0.7071,0.7071);',
+     '  rays = smoothstep(0.0, 1.0, 1.0 - abs(uv.x));',
+     '  m += rays * 0.3 * flare * uGlowIntensity * 0.05;',
+     '  m *= 1.0 - smoothstep(0.0, 0.5, d);',
+     '  return m;',
+     '}',
     '',
     'vec3 StarLayer(vec2 uv, float speed, float layer){',
     '  vec3 col = vec3(0.0);',
@@ -103,7 +103,7 @@
     '      float twinkle = trisn(uTime + seed * 6.2831) * 0.5 + 1.0;',
     '      twinkle = mix(1.0, twinkle, uTwinkleIntensity);',
     '      star *= twinkle;',
-    '      col += star * size * base * (0.5 + 0.5 * layer);',
+     '      col += star * size * base * (1.0 + 0.5 * layer);',
     '    }',
     '  }',
     '  return col;',
@@ -130,17 +130,17 @@
     '    float fade = depth * smoothstep(1.0, 0.9, depth);',
     '    col += StarLayer(uv * scale + i * 453.32, speed, layer) * fade;',
     '  }',
-    '  float alpha = length(col);',
-    '  alpha = smoothstep(0.0, 0.1, alpha);',
-    '  alpha = min(alpha, 1.0);',
-    '  gl_FragColor = vec4(col, alpha);',
+     '  float alpha = length(col);',
+     '  alpha = smoothstep(0.0, 0.01, alpha);',
+     '  alpha = min(alpha, 1.0);',
+     '  gl_FragColor = vec4(col, alpha);',
     '}'
   ].join('\n');
 
   function createGalaxy(container, opts){
     const cfg = {
-      hueShift: 40, saturation: 0.3, glowIntensity: 0.5,
-      twinkleIntensity: 0.4, density: 0.8, rotationSpeed: 0.05,
+      hueShift: 40, saturation: 0.3, glowIntensity: 1.0,
+      twinkleIntensity: 0.6, density: 1.0, rotationSpeed: 0.05,
       mouseRepulsion: true, repulsionStrength: 1.5
     };
     for(const k in opts) if(opts[k] !== undefined) cfg[k] = opts[k];
@@ -168,11 +168,7 @@
      gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
      gl.clearColor(0, 0, 0, 0);
 
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-    gl.clearColor(0,0,0,0);
-
-    function compile(type, src){
+     function compile(type, src){
       const s = gl.createShader(type);
       gl.shaderSource(s, src);
       gl.compileShader(s);
