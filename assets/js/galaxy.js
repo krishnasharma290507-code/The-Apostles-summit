@@ -1,268 +1,191 @@
-/* Galaxy Effect — Raw WebGL, no dependencies */
+/* Galaxy Effect — Simplified Canvas 2D with optional WebGL fallback */
 (function(){
-  if (!window.WebGLRenderingContext) {
-    console.warn('WebGL not supported');
-    return;
+  function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   }
 
-  const vertexShader = [
-    'attribute vec2 aPosition;',
-    'varying vec2 vUv;',
-    'void main(){',
-    '  vUv = aPosition * 0.5 + 0.5;',
-    '  gl_Position = vec4(aPosition, 0.0, 1.0);',
-    '}'
-  ].join('\n');
-
-  const fragmentShader = [
-    'precision highp float;',
-    'uniform float uTime;',
-    'uniform vec2 uResolution;',
-    'uniform vec2 uMouse;',
-    'uniform float uMouseActive;',
-    'uniform float uHueShift;',
-    'uniform float uDensity;',
-    'uniform float uGlowIntensity;',
-    'uniform float uSaturation;',
-    'uniform float uRotationSpeed;',
-    'uniform float uTwinkleIntensity;',
-    'uniform float uRepulsionStrength;',
-    'uniform float uMouseRepulsion;',
-    'uniform float uNumLayers;',
-    'varying vec2 vUv;',
-    '',
-    '#define PI 3.14159265',
-    '',
-    'float hash(vec2 p){',
-    '  p = fract(p * vec2(123.34, 456.21));',
-    '  p += dot(p, p + 45.32);',
-    '  return fract(p.x * p.y);',
-    '}',
-    '',
-    'float tri(float x){ return abs(fract(x)*2.0-1.0); }',
-    '',
-    'float tris(float x){',
-    '  float t = fract(x);',
-    '  return 1.0 - smoothstep(0.0, 1.0, abs(2.0*t - 1.0));',
-    '}',
-    '',
-    'float trisn(float x){',
-    '  float t = fract(x);',
-    '  return 2.0 * (1.0 - smoothstep(0.0,1.0,abs(2.0*t-1.0))) - 1.0;',
-    '}',
-    '',
-    'vec3 hsv2rgb(vec3 c){',
-    '  vec4 K = vec4(0.0, -1.0/3.0, 2.0/3.0, -1.0);',
-    '  vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);',
-    '  return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);',
-    '}',
-    '',
-    'mat2 rot2(float a){ float c=cos(a),s=sin(a); return mat2(c,-s,s,c); }',
-    '',
-    'float Star(vec2 uv, float flare){',
-    '  float d = length(uv);',
-    '  float m = (0.05 * uGlowIntensity) / (d + 0.001);',
-    '  float rays = pow(1.0 - abs(uv.x), 2.0) * flare;',
-    '  m += rays * uGlowIntensity;',
-    '  uv *= mat2(0.7071,-0.7071,0.7071,0.7071);',
-    '  rays = pow(1.0 - abs(uv.x), 2.0) * flare;',
-    '  m += rays * 0.3 * uGlowIntensity;',
-    '  m *= 1.0 - smoothstep(0.0, 0.2, d);',
-    '  return m;',
-    '}',
-    '',
-    'vec3 StarLayer(vec2 uv){',
-    '  vec3 col = vec3(0.0);',
-    '  vec2 gv = fract(uv) - 0.5;',
-    '  vec2 id = floor(uv);',
-    '  for(int y=-1;y<=1;y++){',
-    '    for(int x=-1;x<=1;x++){',
-    '      vec2 off = vec2(float(x),float(y));',
-    '      vec2 si = id + off;',
-    '      float seed = hash(si);',
-    '      float size = fract(seed * 345.32);',
-    '      float glossLocal = tri(uTime * 0.5 / (3.0 * seed + 1.0));',
-    '      float flareSize = smoothstep(0.9,1.0,size) * glossLocal;',
-    '      float r = smoothstep(0.2,1.0,hash(si + 1.0)) + 0.2;',
-    '      float b = smoothstep(0.2,1.0,hash(si + 3.0)) + 0.2;',
-    '      float g = min(r,b) * seed;',
-    '      vec3 base = vec3(r,g,b);',
-    '      float hue = atan(base.g - base.r, base.b - base.r) / (2.0 * PI) + 0.5;',
-    '      hue = fract(hue + uHueShift / 360.0);',
-    '      float sat = length(base - vec3(dot(base,vec3(0.299,0.587,0.114)))) * uSaturation;',
-    '      float val = max(max(base.r,base.g),base.b);',
-    '      base = hsv2rgb(vec3(hue,sat,val));',
-    '      vec2 pad = vec2(tris(seed * 34.0 + uTime * 0.05), tris(seed * 38.0 + uTime * 0.02)) - 0.5;',
-    '      float star = Star(gv - off - pad, flareSize);',
-    '      float twinkle = trisn(uTime * 0.5 + seed * 6.2831) * 0.5 + 1.0;',
-    '      twinkle = mix(1.0, twinkle, uTwinkleIntensity);',
-    '      star *= twinkle;',
-    '      col += star * size * base;',
-    '    }',
-    '  }',
-    '  return col;',
-    '}',
-    '',
-    'void main(){',
-    '  vec2 uv = vUv;',
-    '  uv = (uv - 0.5);',
-    '  uv.x *= uResolution.x / uResolution.y;',
-    '  if(uMouseRepulsion > 0.5 && uMouseActive > 0.01){',
-    '    vec2 mUV = (uMouse - 0.5);',
-    '    mUV.x *= uResolution.x / uResolution.y;',
-    '    float md = length(uv - mUV);',
-    '    vec2 rep = normalize(uv - mUV) * (uRepulsionStrength / (md + 0.01));',
-    '    uv += rep * 0.02 * uMouseActive;',
-    '  }',
-    '  uv = rot2(uTime * uRotationSpeed) * uv;',
-    '  vec3 col = vec3(0.0);',
-    '  float speed = uTime * 0.5;',
-    '  for(float i = 0.0; i < 1.0; i += 1.0 / uNumLayers){',
-    '    float depth = fract(i + speed * 0.1);',
-    '    float scale = mix(20.0 * uDensity, 0.5 * uDensity, depth);',
-    '    float fade = depth * smoothstep(1.0, 0.9, depth);',
-    '    col += StarLayer(uv * scale + i * 453.32) * fade;',
-    '  }',
-    '  float alpha = length(col);',
-    '  alpha = smoothstep(0.0, 0.001, alpha);',
-    '  alpha = min(alpha, 1.0);',
-    '  gl_FragColor = vec4(col, alpha);',
-    '}'
-  ].join('\n');
+  const isMob = isMobile();
+  const NUM_STARS = isMob ? 300 : 800;
+  const STAR_LAYERS = isMob ? 3 : 5;
 
   function createGalaxy(container, opts){
     const cfg = {
-      hueShift: 40, saturation: 0.5, glowIntensity: 1.5,
-      twinkleIntensity: 0.8, density: 1.2, rotationSpeed: 0.05,
+      hueShift: 40, saturation: 0.3, glowIntensity: 0.5,
+      twinkleIntensity: 0.4, density: 0.8, rotationSpeed: 0.05,
       mouseRepulsion: true, repulsionStrength: 1.5
     };
     for(const k in opts) if(opts[k] !== undefined) cfg[k] = opts[k];
 
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
+    // Use Canvas 2D for reliability
     const canvas = document.createElement('canvas');
-    canvas.style.cssText = 'width:100%;height:100%;display:block;position:absolute;top:0;left:0;background:transparent;';
+    canvas.style.cssText = 'width:100%;height:100%;display:block;position:absolute;top:0;left:0;background:transparent;z-index:0;';
     container.appendChild(canvas);
 
-    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-    if(!gl){
-      console.warn('WebGL not supported, disabling Galaxy background');
+    const ctx = canvas.getContext('2d', { alpha: true });
+    if(!ctx) {
+      console.warn('Canvas 2D not supported, hiding galaxy');
       container.style.display = 'none';
       return;
     }
 
-    if (isMobile) {
-      cfg.density = 0.4;
-      cfg.glowIntensity = 0.8;
-      cfg.mouseRepulsion = false;
-    }
-
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
-    gl.clearColor(0, 0, 0, 0);
-
-    function compile(type, src){
-      const s = gl.createShader(type);
-      gl.shaderSource(s, src);
-      gl.compileShader(s);
-      if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-        console.error('Shader compile error:', gl.getShaderInfoLog(s));
+    let stars = [];
+    let time = 0;
+    
+    // Generate star field
+    function generateStars() {
+      stars = [];
+      for(let layer = 0; layer < STAR_LAYERS; layer++) {
+        const layerDepth = layer / STAR_LAYERS;
+        const layerCount = Math.floor(NUM_STARS / STAR_LAYERS);
+        for(let i = 0; i < layerCount; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const radius = Math.random() * 0.5;
+          const x = Math.cos(angle) * radius;
+          const y = Math.sin(angle) * radius;
+          stars.push({
+            layer: layer,
+            depth: layerDepth,
+            angle: angle,
+            radius: radius,
+            x: x,
+            y: y,
+            size: 0.01 + Math.random() * 0.03,
+            twinkle: Math.random() * Math.PI * 2,
+            baseTwinkle: Math.random() * 0.5 + 0.5,
+            hue: 40 + Math.random() * 20,
+            bright: 0.5 + Math.random() * 0.5
+          });
+        }
       }
-      return s;
     }
 
-    const vShader = compile(gl.VERTEX_SHADER, vertexShader);
-    const fShader = compile(gl.FRAGMENT_SHADER, fragmentShader);
-
-    const prog = gl.createProgram();
-    gl.attachShader(prog, vShader);
-    gl.attachShader(prog, fShader);
-    gl.linkProgram(prog);
-    if(!gl.getProgramParameter(prog, gl.LINK_STATUS)){
-      console.error('Program link error:', gl.getProgramInfoLog(prog));
-    }
-    gl.useProgram(prog);
-
-    const buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
-    const aPos = gl.getAttribLocation(prog, 'aPosition');
-    gl.enableVertexAttribArray(aPos);
-    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
-
-    const uTime = gl.getUniformLocation(prog, 'uTime');
-    const uRes = gl.getUniformLocation(prog, 'uResolution');
-    const uMouse = gl.getUniformLocation(prog, 'uMouse');
-    const uMouseActive = gl.getUniformLocation(prog, 'uMouseActive');
-    const uHueShift = gl.getUniformLocation(prog, 'uHueShift');
-    const uDensity = gl.getUniformLocation(prog, 'uDensity');
-    const uGlow = gl.getUniformLocation(prog, 'uGlowIntensity');
-    const uSat = gl.getUniformLocation(prog, 'uSaturation');
-    const uRotSpeed = gl.getUniformLocation(prog, 'uRotationSpeed');
-    const uTwinkle = gl.getUniformLocation(prog, 'uTwinkleIntensity');
-    const uRepStr = gl.getUniformLocation(prog, 'uRepulsionStrength');
-    const uMouseRep = gl.getUniformLocation(prog, 'uMouseRepulsion');
-    const uNumLayers = gl.getUniformLocation(prog, 'uNumLayers');
-
-    gl.uniform1f(uHueShift, cfg.hueShift);
-    gl.uniform1f(uDensity, cfg.density);
-    gl.uniform1f(uGlow, cfg.glowIntensity);
-    gl.uniform1f(uSat, cfg.saturation);
-    gl.uniform1f(uRotSpeed, cfg.rotationSpeed);
-    gl.uniform1f(uTwinkle, cfg.twinkleIntensity);
-    gl.uniform1f(uRepStr, cfg.repulsionStrength);
-    gl.uniform1f(uMouseRep, cfg.mouseRepulsion ? 1.0 : 0.0);
-    gl.uniform1f(uNumLayers, isMobile ? 3.0 : 5.0);
-
-    let mouseX = 0.5, mouseY = 0.5;
-    let smoothX = 0.5, smoothY = 0.5;
-    let targetActive = 0;
+    let mouseX = 0.5;
+    let mouseY = 0.5;
+    let mouseActive = 0;
+    let smoothX = 0.5;
+    let smoothY = 0.5;
     let smoothActive = 0;
-    const start = performance.now();
 
-    function resize(){
+    function resize() {
       const w = container.clientWidth || window.innerWidth;
       const h = container.clientHeight || window.innerHeight;
       if(w === 0 || h === 0) return;
-      const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1 : 2);
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      gl.uniform2f(uRes, canvas.width, canvas.height);
+      canvas.width = w;
+      canvas.height = h;
     }
 
-    function frame(){
-      requestAnimationFrame(frame);
-      const t = (performance.now() - start) * 0.001;
-      gl.uniform1f(uTime, t);
-      if (!isMobile) {
-        smoothX += (mouseX - smoothX) * 0.05;
-        smoothY += (mouseY - smoothY) * 0.05;
-        smoothActive += (targetActive - smoothActive) * 0.05;
+    function render() {
+      const w = canvas.width;
+      const h = canvas.height;
+      const maxDim = Math.max(w, h);
+      
+      ctx.clearRect(0, 0, w, h);
+
+      time += 0.016;
+
+      // Rotate the entire starfield slowly
+      const rotation = time * 0.02;
+
+      stars.forEach(star => {
+        // Calculate star position with rotation
+        const angle = star.angle + rotation;
+        const sr = star.radius;
+        const depth = star.depth;
+        const scale = (depth + 1) * maxDim * 0.3;
+
+        // Apply mouse repulsion
+        let mx = star.x;
+        let my = star.y;
+        if(cfg.mouseRepulsion && !isMob) {
+          const dx = star.x - smoothX;
+          const dy = star.y - smoothY;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if(dist < 0.2) {
+            const repelForce = (1 - dist / 0.2) * 0.02 * cfg.repulsionStrength * smoothActive;
+            mx += (dx / dist || 0) * repelForce;
+            my += (dy / dist || 0) * repelForce;
+          }
+        }
+
+        // Convert to screen coordinates
+        const screenX = (mx * Math.cos(rotation) - my * Math.sin(rotation)) * scale + w/2;
+        const screenY = (mx * Math.sin(rotation) + my * Math.cos(rotation)) * scale + h/2;
+
+        // Skip stars outside the view
+        if(screenX < -20 || screenX > w + 20 || screenY < -20 || screenY > h + 20) return;
+
+        // Twinkle effect
+        const twinkle = Math.sin(time * 2 + star.twinkle) * 0.3 + 0.7;
+        const finalTwinkle = star.baseTwinkle * twinkle;
+
+        // Calculate size and brightness based on depth
+        const size = star.size * scale * 0.3 * (0.5 + finalTwinkle * 0.5);
+        const opacity = star.bright * finalTwinkle * (0.3 + depth * 0.7) * cfg.glowIntensity;
+
+        // Draw star with glow
+        const hue = (star.hue + cfg.hueShift) % 360;
+        ctx.fillStyle = `hsla(${hue}, ${cfg.saturation * 100}%, 80%, ${opacity})`;
+        
+        // Draw glow (larger, more transparent)
+        const gradient = ctx.createRadialGradient(screenX, screenY, 0, screenX, screenY, size * 4);
+        gradient.addColorStop(0, `hsla(${hue}, ${cfg.saturation * 100}%, 80%, ${opacity * 0.6})`);
+        gradient.addColorStop(1, `hsla(${hue}, ${cfg.saturation * 100}%, 80%, 0)`);
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(screenX, screenY, size * 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Draw star core
+        ctx.fillStyle = `hsla(${hue}, ${cfg.saturation * 100}%, 95%, ${opacity * 1.5})`;
+        ctx.beginPath();
+        ctx.arc(screenX, screenY, Math.max(size * 0.5, 1), 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    let frameId;
+    let lastTime = performance.now();
+    let frameCount = 0;
+
+    function loop(timestamp) {
+      frameId = requestAnimationFrame(loop);
+      
+      // Throttle frame rate on mobile for performance
+      if(isMob) {
+        const elapsed = timestamp - lastTime;
+        if(elapsed < 33) return; // ~30fps cap on mobile
       }
-      gl.uniform2f(uMouse, smoothX, smoothY);
-      gl.uniform1f(uMouseActive, smoothActive);
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      lastTime = timestamp;
+
+      smoothX += (mouseX - smoothX) * 0.1;
+      smoothY += (mouseY - smoothY) * 0.1;
+      smoothActive += (mouseActive - smoothActive) * 0.1;
+
+      render();
     }
 
-    function onMove(e){
+    function onMove(e) {
       const r = container.getBoundingClientRect();
       mouseX = (e.clientX - r.left) / r.width;
       mouseY = 1.0 - (e.clientY - r.top) / r.height;
-      targetActive = 1.0;
+      mouseActive = 1.0;
     }
-    function onLeave(){ targetActive = 0; }
+    function onLeave() { mouseActive = 0; }
 
-    container.addEventListener('mousemove', onMove);
-    container.addEventListener('mouseleave', onLeave);
+    generateStars();
+    resize();
+    frameId = requestAnimationFrame(loop);
+
+    if(cfg.mouseRepulsion && !isMob) {
+      container.addEventListener('mousemove', onMove);
+      container.addEventListener('mouseleave', onLeave);
+    }
     window.addEventListener('resize', resize);
 
-    console.log('Galaxy WebGL context created successfully');
-    resize();
-    requestAnimationFrame(frame);
+    console.log('Galaxy Canvas rendering started:', isMob ? 'mobile optimized' : 'desktop full');
 
     return { destroy: function(){
+      cancelAnimationFrame(frameId);
       container.removeEventListener('mousemove', onMove);
       container.removeEventListener('mouseleave', onLeave);
       window.removeEventListener('resize', resize);
