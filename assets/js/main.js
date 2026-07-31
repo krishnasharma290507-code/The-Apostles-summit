@@ -553,8 +553,9 @@ function initPage() {
     summonBtn.addEventListener('mouseenter', () => { /* no-op */ });
     summonBtn.addEventListener('mouseleave', () => { /* no-op */ });
   }
-  if (NPC.summonBtn) NPC.summonBtn.classList.add('visible');
-  try { if (page === 'home') setTimeout(() => NPC.open(true), 900); } catch(e) { console.error('Spike launch error:', e); }
+   if (NPC.summonBtn) NPC.summonBtn.classList.add('visible');
+   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+   try { if (page === 'home' && !isMobile) setTimeout(() => NPC.open(true), 900); } catch(e) { console.error('Spike launch error:', e); }
   document.addEventListener('click', function(e) {
     const link = e.target.closest('a');
     if (link && link.hostname === window.location.hostname && !link.hasAttribute('download') && !link.hasAttribute('target')) {
