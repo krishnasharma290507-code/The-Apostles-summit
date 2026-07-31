@@ -32,14 +32,41 @@
     <button class="nav-toggle" id="navToggle" onclick="toggleNav()" aria-label="Menu">☰</button>
   </div>
 </nav>
-<div class="page">
-  <div class="page-header">
-    <div class="ph-eyebrow">Secretariat Application</div>
-    <h1 class="ph-title">Join the Secretariat</h1>
-    <p class="ph-sub">Applications are open for the Apostles Summit Secretariat 2026. Shape the conference from within — as an organiser, director, or executive board member.</p>
-  </div>
+  <div class="page">
+    <div class="page-header">
+      <div class="ph-eyebrow">Applications Are Open</div>
+      <h1 class="ph-title">Join The Apostles Summit</h1>
+      <p class="ph-sub">Apply to join as a delegate or secretariat member. Registration for delegates closes September 30, 2026. Secretariat applications close September 15, 2026.</p>
+    </div>
+
+    <div class="wrap" style="padding-top:60px">
+      <div class="apply-options-grid">
+        <div class="apply-card">
+          <div class="apply-card-icon">🌌</div>
+          <div class="apply-card-title">Delegate Registration</div>
+          <p class="apply-card-desc">Join as a delegate representing your country. Select from 7 challenging committees and compete for awards.</p>
+          <div class="apply-card-stats">
+            <span><strong>300</strong> Delegates</span>
+            <span><strong>100</strong> Nations</span>
+            <span><strong>7</strong> Committees</span>
+          </div>
+          <a href="https://forms.gle/mk4NyzWRt6TWU8K98" class="btn apply-card-btn" target="_blank" rel="noopener">Register as Delegate</a>
+        </div>
+        <div class="apply-card">
+          <div class="apply-card-icon">🏛️</div>
+          <div class="apply-card-title">Secretariat Application</div>
+          <p class="apply-card-desc">Shape the conference from within — as an organiser, director, or executive board member.</p>
+          <div class="apply-card-stats">
+            <span>Performance-Based Incentives</span>
+            <span>Govt-Recognised Certificates</span>
+            <span>Professional Networking</span>
+          </div>
+          <div class="apply-card-btn" style="background:var(--accent);color:var(--bg);cursor:pointer" onclick="showSecretariatForm()">Apply for Secretariat</div>
+        </div>
+      </div>
+    </div>
   <div class="wrap" style="padding-bottom:80px;padding-top:52px">
-    <div class="reg-panel">
+    <div class="reg-panel" id="secretariatForm" style="display:none">
     <div class="reg-head">
       <div class="reg-head-pre">The Apostles Summit · Secretariat Application</div>
       <div class="reg-head-title">Apply for Secretariat</div>
@@ -252,7 +279,7 @@
     <div>
       <div class="ft-head">Resources</div>
       <ul class="ft-links">
-        <li><a href="committees.html">Committee Matrix</a></li>
+        <li><a href="https://docs.google.com/spreadsheets/d/1gj-rE5Oi8mm0y1Y42Uh25D3Vp79RE48dImyr0q1-JV8/edit?usp=sharing" target="_blank" rel="noopener">Committee Matrix</a></li>
         <li><a href="about.html">Conference Details</a></li>
         <li><a href="about.html">Why Join Us</a></li>
       </ul>
@@ -300,6 +327,12 @@
 <button class="summon-btn" id="summonBtn" onclick="openNPC()">Ask Spike</button>
 <div class="toast" id="toastEl"><div class="toast-t" id="toastT"></div><div class="toast-m" id="toastM"></div></div>
 <script src="assets/js/main.js"></script>
+<script>
+function showSecretariatForm(){
+  const form = document.getElementById('secretariatForm');
+  if(form){ form.style.display = 'block'; form.scrollIntoView({behavior:'smooth'}); }
+}
+</script>
 <script src="assets/js/register.js"></script>
 </body>
 </html>
