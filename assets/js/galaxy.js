@@ -1,6 +1,5 @@
 /* Galaxy Effect — Raw WebGL, no dependencies */
 (function(){
-  // Shim for old browsers without WebGL
   if (!window.WebGLRenderingContext) {
     console.warn('WebGL not supported');
     return;
@@ -32,17 +31,12 @@
     'uniform float uNumLayers;',
     'varying vec2 vUv;',
     '',
-    '#define STAR_CUTOFF 0.1',
     '#define PI 3.14159265',
     '',
     'float hash(vec2 p){',
     '  p = fract(p * vec2(123.34, 456.21));',
     '  p += dot(p, p + 45.32);',
     '  return fract(p.x * p.y);',
-    '}',
-    '',
-    'float hash1(float p){',
-    '  return fract(sin(p * 123.45) * 456.78);',
     '}',
     '',
     'float tri(float x){ return abs(fract(x)*2.0-1.0); }',
@@ -58,26 +52,26 @@
     '}',
     '',
     'vec3 hsv2rgb(vec3 c){',
-    '  vec4 K = vec4(1.0, 2.0/3.0, 1.0/3.0, 3.0);',
-    '  vec3 p = abs(fract(c.xxx + K.xyz)*6.0 - K.www);',
-    '  return c.z * mix(K.xxx, clamp(p-K.xxx,0.0,1.0), c.y);',
+    '  vec4 K = vec4(0.0, -1.0/3.0, 2.0/3.0, -1.0);',
+    '  vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);',
+    '  return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);',
     '}',
     '',
     'mat2 rot2(float a){ float c=cos(a),s=sin(a); return mat2(c,-s,s,c); }',
     '',
-     'float Star(vec2 uv, float flare){',
-     '  float d = length(uv);',
-     '  float m = (0.05 * uGlowIntensity * 0.05) / (d * d + 0.001);',
-     '  float rays = smoothstep(0.0, 1.0, 1.0 - abs(uv.x));',
-     '  m += rays * flare * uGlowIntensity * 0.05;',
-     '  uv *= mat2(0.7071,-0.7071,0.7071,0.7071);',
-     '  rays = smoothstep(0.0, 1.0, 1.0 - abs(uv.x));',
-     '  m += rays * 0.3 * flare * uGlowIntensity * 0.05;',
-     '  m *= 1.0 - smoothstep(0.0, 0.5, d);',
-     '  return m;',
-     '}',
+    'float Star(vec2 uv, float flare){',
+    '  float d = length(uv);',
+    '  float m = (0.07 / d) * (uGlowIntensity * 0.5);',
+    '  float rays = pow(1.0 - abs(uv.x), 2.0) * flare;',
+    '  m += rays * uGlowIntensity * 0.3;',
+    '  uv *= mat2(0.7071,-0.7071,0.7071,0.7071);',
+    '  rays = pow(1.0 - abs(uv.x), 2.0) * flare;',
+    '  m += rays * uGlowIntensity * 0.3;',
+    '  m *= 1.0 - smoothstep(0.0, 0.4, d);',
+    '  return m;',
+    '}',
     '',
-    'vec3 StarLayer(vec2 uv, float speed, float layer){',
+    'vec3 StarLayer(vec2 uv, float speed, float layerIdx){',
     '  vec3 col = vec3(0.0);',
     '  vec2 gv = fract(uv) - 0.5;',
     '  vec2 id = floor(uv);',
@@ -103,7 +97,7 @@
     '      float twinkle = trisn(uTime + seed * 6.2831) * 0.5 + 1.0;',
     '      twinkle = mix(1.0, twinkle, uTwinkleIntensity);',
     '      star *= twinkle;',
-     '      col += star * size * base * (1.0 + 0.5 * layer);',
+    '      col += star * size * base * (1.0 + 0.5 * (layerIdx + 1.0));',
     '    }',
     '  }',
     '  return col;',
@@ -125,50 +119,50 @@
     '  float speed = uTime * 0.5;',
     '  for(float i = 0.0; i < 1.0; i += 1.0 / uNumLayers){',
     '    float depth = fract(i + speed * 0.1);',
-    '    float layer = depth;',
+    '    float layerIdx = i;',
     '    float scale = mix(4.0 * uDensity, 20.0 * uDensity, depth);',
     '    float fade = depth * smoothstep(1.0, 0.9, depth);',
-    '    col += StarLayer(uv * scale + i * 453.32, speed, layer) * fade;',
+    '    col += StarLayer(uv * scale + i * 453.32, speed, layerIdx) * fade;',
     '  }',
-     '  float alpha = length(col);',
-     '  alpha = smoothstep(0.0, 0.01, alpha);',
-     '  alpha = min(alpha, 1.0);',
-     '  gl_FragColor = vec4(col, alpha);',
+    '  float alpha = length(col);',
+    '  alpha = smoothstep(0.0, 0.001, alpha);',
+    '  alpha = min(alpha, 1.0);',
+    '  gl_FragColor = vec4(col, alpha);',
     '}'
   ].join('\n');
 
   function createGalaxy(container, opts){
     const cfg = {
-      hueShift: 40, saturation: 0.3, glowIntensity: 1.0,
-      twinkleIntensity: 0.6, density: 1.0, rotationSpeed: 0.05,
+      hueShift: 40, saturation: 0.5, glowIntensity: 1.5,
+      twinkleIntensity: 0.8, density: 1.2, rotationSpeed: 0.05,
       mouseRepulsion: true, repulsionStrength: 1.5
     };
     for(const k in opts) if(opts[k] !== undefined) cfg[k] = opts[k];
 
-     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-     const canvas = document.createElement('canvas');
-     canvas.style.cssText = 'width:100%;height:100%;display:block;position:absolute;top:0;left:0;background:transparent;';
-     container.appendChild(canvas);
+    const canvas = document.createElement('canvas');
+    canvas.style.cssText = 'width:100%;height:100%;display:block;position:absolute;top:0;left:0;background:transparent;';
+    container.appendChild(canvas);
 
-     const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-     if(!gl){
-       console.warn('WebGL not supported, disabling Galaxy background');
-       container.style.display = 'none';
-       return;
-     }
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if(!gl){
+      console.warn('WebGL not supported, disabling Galaxy background');
+      container.style.display = 'none';
+      return;
+    }
 
-     if (isMobile) {
-       cfg.density = 0.3;
-       cfg.glowIntensity = 0.2;
-       cfg.mouseRepulsion = false;
-     }
+    if (isMobile) {
+      cfg.density = 0.4;
+      cfg.glowIntensity = 0.8;
+      cfg.mouseRepulsion = false;
+    }
 
-     gl.enable(gl.BLEND);
-     gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
-     gl.clearColor(0, 0, 0, 0);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+    gl.clearColor(0, 0, 0, 0);
 
-     function compile(type, src){
+    function compile(type, src){
       const s = gl.createShader(type);
       gl.shaderSource(s, src);
       gl.compileShader(s);
@@ -206,20 +200,20 @@
     const uGlow = gl.getUniformLocation(prog, 'uGlowIntensity');
     const uSat = gl.getUniformLocation(prog, 'uSaturation');
     const uRotSpeed = gl.getUniformLocation(prog, 'uRotationSpeed');
-     const uTwinkle = gl.getUniformLocation(prog, 'uTwinkleIntensity');
-     const uRepStr = gl.getUniformLocation(prog, 'uRepulsionStrength');
-     const uMouseRep = gl.getUniformLocation(prog, 'uMouseRepulsion');
-     const uNumLayers = gl.getUniformLocation(prog, 'uNumLayers');
+    const uTwinkle = gl.getUniformLocation(prog, 'uTwinkleIntensity');
+    const uRepStr = gl.getUniformLocation(prog, 'uRepulsionStrength');
+    const uMouseRep = gl.getUniformLocation(prog, 'uMouseRepulsion');
+    const uNumLayers = gl.getUniformLocation(prog, 'uNumLayers');
 
-     gl.uniform1f(uHueShift, cfg.hueShift);
-     gl.uniform1f(uDensity, cfg.density);
-     gl.uniform1f(uGlow, cfg.glowIntensity);
-     gl.uniform1f(uSat, cfg.saturation);
-     gl.uniform1f(uRotSpeed, cfg.rotationSpeed);
-     gl.uniform1f(uTwinkle, cfg.twinkleIntensity);
-     gl.uniform1f(uRepStr, cfg.repulsionStrength);
-     gl.uniform1f(uMouseRep, cfg.mouseRepulsion ? 1.0 : 0.0);
-     gl.uniform1f(uNumLayers, isMobile ? 3.0 : 5.0);
+    gl.uniform1f(uHueShift, cfg.hueShift);
+    gl.uniform1f(uDensity, cfg.density);
+    gl.uniform1f(uGlow, cfg.glowIntensity);
+    gl.uniform1f(uSat, cfg.saturation);
+    gl.uniform1f(uRotSpeed, cfg.rotationSpeed);
+    gl.uniform1f(uTwinkle, cfg.twinkleIntensity);
+    gl.uniform1f(uRepStr, cfg.repulsionStrength);
+    gl.uniform1f(uMouseRep, cfg.mouseRepulsion ? 1.0 : 0.0);
+    gl.uniform1f(uNumLayers, isMobile ? 3.0 : 5.0);
 
     let mouseX = 0.5, mouseY = 0.5;
     let smoothX = 0.5, smoothY = 0.5;
@@ -231,7 +225,7 @@
       const w = container.clientWidth || window.innerWidth;
       const h = container.clientHeight || window.innerHeight;
       if(w === 0 || h === 0) return;
-      var dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1 : 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1 : 2);
       canvas.width = w * dpr;
       canvas.height = h * dpr;
       gl.viewport(0, 0, canvas.width, canvas.height);
@@ -270,7 +264,6 @@
     requestAnimationFrame(frame);
 
     return { destroy: function(){
-      requestAnimationFrame(function(){ if(running) running = false; });
       container.removeEventListener('mousemove', onMove);
       container.removeEventListener('mouseleave', onLeave);
       window.removeEventListener('resize', resize);
