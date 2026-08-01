@@ -1,22 +1,22 @@
-/* Galaxy Effect — Simplified Canvas 2D with optional WebGL fallback */
+/* Galaxy Effect — Immersive Canvas 2D starfield with rich twinkling */
 (function(){
   function isMobile() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   }
 
   const isMob = isMobile();
-  const NUM_STARS = isMob ? 300 : 800;
-  const STAR_LAYERS = isMob ? 3 : 5;
+  const NUM_STARS = isMob ? 300 : 1000;
+  const STAR_LAYERS = isMob ? 3 : 6;
 
   function createGalaxy(container, opts){
     const cfg = {
-      hueShift: 40, saturation: 0.3, glowIntensity: 0.5,
-      twinkleIntensity: 0.4, density: 0.8, rotationSpeed: 0.05,
+      hueShift: 40, saturation: 0.3, glowIntensity: 0.6,
+      twinkleIntensity: 0.5, density: 0.8, rotationSpeed: 0.05,
       mouseRepulsion: true, repulsionStrength: 1.5
     };
     for(const k in opts) if(opts[k] !== undefined) cfg[k] = opts[k];
 
-    // Use Canvas 2D for reliability
+    // Create canvas
     const canvas = document.createElement('canvas');
     canvas.style.cssText = 'width:100%;height:100%;display:block;position:absolute;top:0;left:0;background:transparent;z-index:0;';
     container.appendChild(canvas);
@@ -30,18 +30,45 @@
 
     let stars = [];
     let time = 0;
-    
-    // Generate star field
+
+    // Enhanced star generation with varied twinkle patterns
     function generateStars() {
       stars = [];
       for(let layer = 0; layer < STAR_LAYERS; layer++) {
         const layerDepth = layer / STAR_LAYERS;
         const layerCount = Math.floor(NUM_STARS / STAR_LAYERS);
+
+        // Each layer has different twinkle characteristics
+        const layerTwinkleSpeed = 0.5 + layer * 0.3;
+        const layerTwinkleAmp = 0.3 + layer * 0.1;
+
         for(let i = 0; i < layerCount; i++) {
           const angle = Math.random() * Math.PI * 2;
-          const radius = Math.random() * 0.5;
+          const radius = Math.random() * 0.6 + (layer * 0.1);
           const x = Math.cos(angle) * radius;
           const y = Math.sin(angle) * radius;
+
+          // More diverse star properties
+          const twinkleOffset = Math.random() * Math.PI * 2;
+          const twinkleFreq = 0.7 + Math.random() * 0.8;
+
+          // Some stars twinkle faster, some slower
+          const twinklePattern = Math.random();
+          let twinkleType = 'sine';
+          let twinkleSpeedMultiplier = 1;
+          if(twinklePattern > 0.8) {
+            // Pulsing stars (slow)
+            twinkleType = 'pulse';
+            twinkleSpeedMultiplier = 0.3;
+          } else if(twinklePattern > 0.6) {
+            // Fast twinkling stars
+            twinkleType = 'fast';
+            twinkleSpeedMultiplier = 2.5;
+          }
+
+          // Add some stars that flicker randomly
+          const flickerChance = Math.random();
+
           stars.push({
             layer: layer,
             depth: layerDepth,
@@ -49,11 +76,19 @@
             radius: radius,
             x: x,
             y: y,
-            size: 0.01 + Math.random() * 0.03,
-            twinkle: Math.random() * Math.PI * 2,
-            baseTwinkle: Math.random() * 0.5 + 0.5,
-            hue: 40 + Math.random() * 20,
-            bright: 0.5 + Math.random() * 0.5
+            size: 0.005 + Math.random() * 0.04,
+            twinkleOffset: twinkleOffset,
+            twinkleFreq: twinkleFreq,
+            twinkleType: twinkleType,
+            twinkleSpeedMult: twinkleSpeedMultiplier,
+            baseTwinkle: Math.random() * 0.4 + 0.6,
+            hue: 30 + Math.random() * 40,
+            bright: 0.5 + Math.random() * 0.5,
+            flickerChance: flickerChance,
+            layerTwinkleSpeed: layerTwinkleSpeed,
+            layerTwinkleAmp: layerTwinkleAmp,
+            // Add some star color variation
+            colorType: Math.random() > 0.7 ? 'blue' : Math.random() > 0.5 ? 'warm' : 'white'
           });
         }
       }
@@ -74,22 +109,37 @@
       canvas.height = h;
     }
 
+    function getStarTwinkle(star, t) {
+      const baseTime = t * 0.5;
+
+      switch(star.twinkleType) {
+        case 'pulse':
+          // Slow pulsing for distant stars
+          return Math.sin(baseTime * 0.3 * star.twinkleSpeedMult + star.twinkleOffset) * 0.3 + 0.7;
+        case 'fast':
+          // Fast flickering for bright stars
+          return Math.abs(Math.sin(baseTime * 1.5 * star.twinkleSpeedMult + star.twinkleOffset)) * 0.5 + 0.5;
+        default:
+          // Normal twinkling
+          return Math.sin(baseTime * star.twinkleFreq * star.twinkleSpeedMult + star.twinkleOffset) * 0.25 + 0.75;
+      }
+    }
+
     function render() {
       const w = canvas.width;
       const h = canvas.height;
       const maxDim = Math.max(w, h);
-      
+
       ctx.clearRect(0, 0, w, h);
 
       time += 0.016;
 
       // Rotate the entire starfield slowly
-      const rotation = time * 0.02;
+      const rotation = time * 0.03;
 
       stars.forEach(star => {
         // Calculate star position with rotation
         const angle = star.angle + rotation;
-        const sr = star.radius;
         const depth = star.depth;
         const scale = (depth + 1) * maxDim * 0.3;
 
@@ -100,8 +150,8 @@
           const dx = star.x - smoothX;
           const dy = star.y - smoothY;
           const dist = Math.sqrt(dx*dx + dy*dy);
-          if(dist < 0.2) {
-            const repelForce = (1 - dist / 0.2) * 0.02 * cfg.repulsionStrength * smoothActive;
+          if(dist < 0.3) {
+            const repelForce = (1 - dist / 0.3) * 0.03 * cfg.repulsionStrength * smoothActive;
             mx += (dx / dist || 0) * repelForce;
             my += (dy / dist || 0) * repelForce;
           }
@@ -112,54 +162,67 @@
         const screenY = (mx * Math.sin(rotation) + my * Math.cos(rotation)) * scale + h/2;
 
         // Skip stars outside the view
-        if(screenX < -20 || screenX > w + 20 || screenY < -20 || screenY > h + 20) return;
+        if(screenX < -30 || screenX > w + 30 || screenY < -30 || screenY > h + 30) return;
 
-        // Twinkle effect
-        const twinkle = Math.sin(time * 2 + star.twinkle) * 0.3 + 0.7;
-        const finalTwinkle = star.baseTwinkle * twinkle;
+        // Get twinkle value for this star
+        let twinkleVal = getStarTwinkle(star, time);
+
+        // Add random flicker for special stars
+        if(star.flickerChance > 0.9) {
+          twinkleVal *= 0.7 + Math.random() * 0.3;
+        }
+
+        const finalTwinkle = star.baseTwinkle * twinkleVal;
 
         // Calculate size and brightness based on depth
-        const size = star.size * scale * 0.3 * (0.5 + finalTwinkle * 0.5);
+        const size = star.size * scale * 0.4 * (0.5 + finalTwinkle * 0.5);
         const opacity = star.bright * finalTwinkle * (0.3 + depth * 0.7) * cfg.glowIntensity;
 
-        // Draw star with glow
-        const hue = (star.hue + cfg.hueShift) % 360;
-        ctx.fillStyle = `hsla(${hue}, ${cfg.saturation * 100}%, 80%, ${opacity})`;
-        
-        // Draw glow (larger, more transparent)
-        const gradient = ctx.createRadialGradient(screenX, screenY, 0, screenX, screenY, size * 4);
-        gradient.addColorStop(0, `hsla(${hue}, ${cfg.saturation * 100}%, 80%, ${opacity * 0.6})`);
+        // Color based on star type
+        let hue = star.hue + cfg.hueShift;
+        if(star.colorType === 'blue') {
+          hue = 200 + Math.random() * 40;
+        } else if(star.colorType === 'warm') {
+          hue = 20 + Math.random() * 30;
+        }
+
+        hue = hue % 360;
+
+        // Draw glow (larger, more transparent) - multiple layers for better glow
+        const gradient = ctx.createRadialGradient(screenX, screenY, 0, screenX, screenY, size * 5);
+        gradient.addColorStop(0, `hsla(${hue}, ${cfg.saturation * 100}%, 80%, ${opacity * 0.8})`);
+        gradient.addColorStop(0.4, `hsla(${hue}, ${cfg.saturation * 100}%, 70%, ${opacity * 0.4})`);
         gradient.addColorStop(1, `hsla(${hue}, ${cfg.saturation * 100}%, 80%, 0)`);
         ctx.fillStyle = gradient;
         ctx.beginPath();
-        ctx.arc(screenX, screenY, size * 4, 0, Math.PI * 2);
+        ctx.arc(screenX, screenY, size * 5, 0, Math.PI * 2);
         ctx.fill();
 
-        // Draw star core
-        ctx.fillStyle = `hsla(${hue}, ${cfg.saturation * 100}%, 95%, ${opacity * 1.5})`;
+        // Draw star core with brightness variation
+        const coreOpacity = opacity * 2 + (finalTwinkle * 0.5);
+        ctx.fillStyle = `hsla(${hue}, ${cfg.saturation * 100}%, 95%, ${Math.min(coreOpacity, 1.5)})`;
         ctx.beginPath();
-        ctx.arc(screenX, screenY, Math.max(size * 0.5, 1), 0, Math.PI * 2);
+        ctx.arc(screenX, screenY, Math.max(size * 0.5, 0.5), 0, Math.PI * 2);
         ctx.fill();
       });
     }
 
     let frameId;
     let lastTime = performance.now();
-    let frameCount = 0;
+    let lastFrameTime = 0;
+    const MIN_FRAME_TIME = isMob ? 33 : 16; // 30fps mobile, 60fps desktop
 
     function loop(timestamp) {
       frameId = requestAnimationFrame(loop);
-      
-      // Throttle frame rate on mobile for performance
-      if(isMob) {
-        const elapsed = timestamp - lastTime;
-        if(elapsed < 33) return; // ~30fps cap on mobile
-      }
-      lastTime = timestamp;
 
-      smoothX += (mouseX - smoothX) * 0.1;
-      smoothY += (mouseY - smoothY) * 0.1;
-      smoothActive += (mouseActive - smoothActive) * 0.1;
+      // Throttle frame rate for performance
+      const elapsed = timestamp - lastFrameTime;
+      if(elapsed < MIN_FRAME_TIME) return;
+      lastFrameTime = timestamp;
+
+      smoothX += (mouseX - smoothX) * 0.08;
+      smoothY += (mouseY - smoothY) * 0.08;
+      smoothActive += (mouseActive - smoothActive) * 0.08;
 
       render();
     }

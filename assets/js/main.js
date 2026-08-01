@@ -430,6 +430,13 @@ function initCounters() {
 function openNPC()  { NPC.open(false); }
 function closeNPC() { NPC.close(); }
 function sendChat() { NPC.sendChat(); }
+function showSecretariatForm(){
+  const form = document.getElementById('secretariatForm');
+  if(form){
+    form.style.display = 'block';
+    form.scrollIntoView({behavior: 'smooth', block: 'start'});
+  }
+}
 
 function goPage(from, to) {
   if (from === 1) {
