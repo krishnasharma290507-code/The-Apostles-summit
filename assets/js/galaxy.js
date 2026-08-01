@@ -110,18 +110,18 @@
     }
 
     function getStarTwinkle(star, t) {
-      const baseTime = t * 0.5;
+      const baseTime = t * 0.3;
 
       switch(star.twinkleType) {
         case 'pulse':
           // Slow pulsing for distant stars
-          return Math.sin(baseTime * 0.3 * star.twinkleSpeedMult + star.twinkleOffset) * 0.3 + 0.7;
+          return Math.sin(baseTime * 0.5 + star.twinkleOffset) * 0.15 + 0.85;
         case 'fast':
-          // Fast flickering for bright stars
-          return Math.abs(Math.sin(baseTime * 1.5 * star.twinkleSpeedMult + star.twinkleOffset)) * 0.5 + 0.5;
+          // Faster flickering for bright stars
+          return Math.abs(Math.sin(baseTime * 2.0 + star.twinkleOffset)) * 0.2 + 0.8;
         default:
-          // Normal twinkling
-          return Math.sin(baseTime * star.twinkleFreq * star.twinkleSpeedMult + star.twinkleOffset) * 0.25 + 0.75;
+          // Subtle twinkling
+          return Math.sin(baseTime + star.twinkleOffset) * 0.12 + 0.88;
       }
     }
 
@@ -141,7 +141,7 @@
         // Calculate star position with rotation
         const angle = star.angle + rotation;
         const depth = star.depth;
-        const scale = (depth + 1) * maxDim * 0.3;
+        const scale = (depth + 1) * maxDim * 0.15;
 
         // Apply mouse repulsion
         let mx = star.x;
@@ -162,21 +162,21 @@
         const screenY = (mx * Math.sin(rotation) + my * Math.cos(rotation)) * scale + h/2;
 
         // Skip stars outside the view
-        if(screenX < -30 || screenX > w + 30 || screenY < -30 || screenY > h + 30) return;
+        if(screenX < -10 || screenX > w + 10 || screenY < -10 || screenY > h + 10) return;
 
         // Get twinkle value for this star
         let twinkleVal = getStarTwinkle(star, time);
 
         // Add random flicker for special stars
         if(star.flickerChance > 0.9) {
-          twinkleVal *= 0.7 + Math.random() * 0.3;
+          twinkleVal *= 0.8 + Math.random() * 0.2;
         }
 
         const finalTwinkle = star.baseTwinkle * twinkleVal;
 
-        // Calculate size and brightness based on depth
-        const size = star.size * scale * 0.4 * (0.5 + finalTwinkle * 0.5);
-        const opacity = star.bright * finalTwinkle * (0.3 + depth * 0.7) * cfg.glowIntensity;
+        // Calculate size and brightness based on depth - smaller for distant stars
+        const size = star.size * scale * 0.05;
+        let opacity = star.bright * finalTwinkle * (0.3 + depth * 0.7) * cfg.glowIntensity;
 
         // Color based on star type
         let hue = star.hue + cfg.hueShift;
@@ -188,21 +188,21 @@
 
         hue = hue % 360;
 
-        // Draw glow (larger, more transparent) - multiple layers for better glow
-        const gradient = ctx.createRadialGradient(screenX, screenY, 0, screenX, screenY, size * 5);
-        gradient.addColorStop(0, `hsla(${hue}, ${cfg.saturation * 100}%, 80%, ${opacity * 0.8})`);
-        gradient.addColorStop(0.4, `hsla(${hue}, ${cfg.saturation * 100}%, 70%, ${opacity * 0.4})`);
-        gradient.addColorStop(1, `hsla(${hue}, ${cfg.saturation * 100}%, 80%, 0)`);
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(screenX, screenY, size * 5, 0, Math.PI * 2);
-        ctx.fill();
+        // Draw glow ONLY for the brightest stars
+        if(size > 1.5 && opacity > 0.6) {
+          const gradient = ctx.createRadialGradient(screenX, screenY, 0, screenX, screenY, size * 3);
+          gradient.addColorStop(0, `hsla(${hue}, 100%, 95%, ${opacity * 0.6})`);
+          gradient.addColorStop(1, `hsla(${hue}, 100%, 95%, 0)`);
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(screenX, screenY, size * 3, 0, Math.PI * 2);
+          ctx.fill();
+        }
 
-        // Draw star core with brightness variation
-        const coreOpacity = opacity * 2 + (finalTwinkle * 0.5);
-        ctx.fillStyle = `hsla(${hue}, ${cfg.saturation * 100}%, 95%, ${Math.min(coreOpacity, 1.5)})`;
+        // Draw star core - small and sharp, not large
+        ctx.fillStyle = `hsla(${hue}, 100%, 95%, ${opacity})`;
         ctx.beginPath();
-        ctx.arc(screenX, screenY, Math.max(size * 0.5, 0.5), 0, Math.PI * 2);
+        ctx.arc(screenX, screenY, Math.max(size * 0.5, 0.3), 0, Math.PI * 2);
         ctx.fill();
       });
     }
