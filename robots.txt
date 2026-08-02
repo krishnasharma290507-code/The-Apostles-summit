@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://the-apostles-summit.vercel.app/sitemap.xml
