@@ -675,3 +675,124 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:64px 36px
 /* ─── SKY BACKGROUND ─── */
 .skybg-container{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .skybg-canvas{display:block;width:100%;height:100%}
+
+/* ─── MOBILE OPTIMIZATIONS ─── */
+@media(max-width:768px){
+  /* Nav adjustments */
+  .nav{top:15px}
+  .nav-inner{padding:0 16px;height:52px}
+  .nav-brand{font-size:13px}
+  .nav-link{font-size:11px;padding:6px 12px}
+  .nav-apply{font-size:11px;padding:6px 16px}
+  .nav-toggle{top:7px}
+  
+  /* Hero adjustments */
+  .hero{padding:100px 16px 0;text-align:center}
+  .hero-box{padding:28px 40px;margin-bottom:24px}
+  .hero-title .hl1{font-size:clamp(2rem,8vw,3.5rem)}
+  .hero-title .hl2{font-size:clamp(1rem,2.5vw,1.4rem)}
+  .hero-title .hl3{font-size:clamp(0.5rem,1.2vw,0.7rem)}
+  .hero-actions{gap:12px;margin-top:6px}
+  .btn{padding:10px 24px;font-size:11px}
+  .btn-outline{padding:10px 24px;font-size:11px}
+  
+  /* Ticker */
+  .ticker{padding:4px 0}
+  .ticker-item{font-size:7px;gap:30px}
+  @keyframes marquee-mobile{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  .ticker-track{animation:marquee-mobile 30s linear infinite}
+  
+  /* Stats */
+  .stats-bar{grid-template-columns:repeat(2,1fr);gap:12px;padding:20px 16px}
+  .stat-cell{padding:14px 0}
+  .stat-n{font-size:20px}
+  .stat-l{font-size:10px}
+  
+  /* Buttons */
+  .btn{
+    font-size:11px;
+    padding:10px 24px;
+    min-height:36px;
+    min-width:36px;
+  }
+  
+  /* Text sizes */
+  .sec-sub{font-size:10px}
+  .sec-title{font-size:clamp(1.4rem,3vw,2rem)}
+  
+  /* Detail cards */
+  .detail-item{padding:20px 12px}
+  .detail-icon{font-size:12px}
+  .detail-label{font-size:7px}
+  .detail-val{font-size:12px}
+  
+  /* Content spacing */
+  .wrap{padding:40px 16px}
+  .about-grid{gap:24px}
+  .first-event-section{padding:56px 0}
+  
+  /* Committee cards */
+  .hc-card{padding:18px 12px}
+  .hc-name{font-size:13px}
+  .hc-theme{font-size:9px}
+  
+  /* Form adjustments */
+  .reg-panel{padding:16px}
+  .reg-head-title{font-size:20px}
+  .flabel{font-size:11px}
+  .finput{font-size:13px;padding:8px 10px}
+  .ftarea{font-size:13px;padding:10px}
+  .fsel{font-size:13px;padding:8px 10px}
+  .perks-strip{gap:10px}
+  .perk-item{font-size:10px;padding:6px 8px}
+  
+  /* Footer */
+  .ft-grid{grid-template-columns:1fr;gap:24px;padding:32px 16px}
+  .ft-bottom{padding:16px;text-align:center;font-size:11px}
+  
+  /* NPC */
+  .npc-text{font-size:12px;line-height:1.5}
+  .npc-input{font-size:12px}
+  .npc-send{font-size:8px;padding:8px 14px}
+  
+  /* Apply cards */
+  .apply-options-grid{grid-template-columns:1fr;gap:16px}
+  .apply-card{padding:24px 16px}
+  .apply-card-title{font-size:16px}
+  .apply-card-icon{font-size:36px}
+  
+  /* Toast */
+  .toast{max-width:240px;font-size:12px;padding:12px 18px}
+  .toast-m{font-size:12px}
+  
+  /* Backdrop filters - disable for better perf on mobile */
+  .nav{background:rgba(0,0,0,.85);backdrop-filter:none;-webkit-backdrop-filter:none}
+  #npcOverlay{backdrop-filter:none;-webkit-backdrop-filter:none}
+}
+
+@media(max-width:480px){
+  /* Even more compact on small screens */
+  .hero{padding:70px 12px 0}
+  .hero-box{padding:20px 28px;margin-bottom:16px}
+  .hero-title .hl1{font-size:clamp(1.5rem,10vw,2.5rem)}
+  .hero-title .hl2{font-size:clamp(0.8rem,2.5vw,1.1rem)}
+  .cta-band{padding:20px 12px}
+  .cta-band-inner{flex-direction:column;text-align:center;gap:12px}
+  .cta-band-title{font-size:16px}
+  
+  /* Stat cards grid */
+  .stats-bar{grid-template-columns:1fr;gap:8px}
+  .stat-cell{padding:10px 0}
+  
+  /* Hide non-essential decorative elements */
+  .spike-portrait-wrap{display:none}
+  
+  /* Reduce font sizes further */
+  .btn{font-size:10px;padding:8px 20px}
+  .fe-title{font-size:clamp(1.4rem,5vw,1.8rem)}
+  .fe-badge{font-size:9px}
+  
+  /* Form fields */
+  .finput,.fsel,.ftarea{font-size:14px}
+  .step-bar{display:none}
+}

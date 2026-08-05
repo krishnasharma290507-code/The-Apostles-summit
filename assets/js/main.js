@@ -276,7 +276,7 @@ const NPC = {
     if (/committee|chamber|temptation/.test(m) && /ip|press|journalist|lust/.test(m)) return "IP Press Corps embodies Lust — International Press. Our committee for aspiring journalists. Cover the summit, write articles, conduct interviews, and publish daily newsletters!";
     if (/committee|chamber|temptation/.test(m)) return "We have 7 committees, each paired with a temptation: UNSC (Pride), UNHRC (Greed), UNCSW (Wrath), AIPPM (Envy), IP Press Corps (Lust), IPL (Gluttony), and UEFA (Sloth). Head to the Committees page for full details!";
     if (/register|apply|application|how.*join|how.*sign/.test(m)) return "Secretariat applications are open! Head to the Apply page and fill in the form with your name, school, preferences, and more. Our team will review and get back to you!";
-    if (/date|when|schedule|timing|october/.test(m)) return "The Apostles Summit takes place on October 15–16, 2026 in New Delhi. Two days of intense diplomacy and debate!";
+    if (/date|when|schedule|timing|october/.test(m)) return "The Apostles Summit takes place on October 17–19, 2026 in New Delhi. Three days of intense diplomacy and debate!";
     if (/venue|location|where|delhi/.test(m)) return "The summit is held in New Delhi, India. The exact venue will be announced to confirmed delegates closer to the date.";
     if (/fee|cost|price|payment|ticket/.test(m)) return "Registration fees and payment details will be shared with shortlisted candidates after the application review. Stay tuned!";
     if (/experience|beginner|first time|newbie|novice/.test(m)) return "All experience levels are welcome! First-timers might prefer UNCSW, IP Press Corps, or AIPPM as their starting committee. Veterans can target UNSC, IPL, or UEFA. Be honest about your experience — we'll place you where you can shine.";
@@ -382,8 +382,8 @@ function initCounters() {
   } catch(e) { console.warn('Counter error:', e); }
 }
 (function(){
-  const CONF_DATE = new Date('2026-10-15T09:00:00');
-  const CONF_DATE_LABEL = 'October 15 \u2013 16, 2026';
+  const CONF_DATE = new Date('2026-10-17T09:00:00');
+  const CONF_DATE_LABEL = 'October 17 \u2013 19, 2026';
   const el = {
     days:  document.getElementById('cd-days'),
     hours: document.getElementById('cd-hours'),
